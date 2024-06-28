@@ -1,6 +1,8 @@
 package com.tickitz.backend.auth.service.impl;
 
+import com.tickitz.backend.auth.dto.ResetPasswordRequestDto;
 import com.tickitz.backend.auth.service.AuthService;
+import com.tickitz.backend.exceptions.applicationException.ApplicationException;
 import com.tickitz.backend.users.entity.Users;
 import com.tickitz.backend.users.repository.UsersRepository;
 import lombok.extern.java.Log;
@@ -53,8 +55,15 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
-  public String resetPassword(String email) {
-    Optional<Users> usersOptional = usersRepository.findByEmail(email);
-    return null;
+  public String resetPassword(ResetPasswordRequestDto resetPasswordRequestDto) {
+    Optional<Users> exists = usersRepository.findByEmail(resetPasswordRequestDto.getEmail());
+    if (exists.isPresent()) {
+      Users user = exists.get();
+      String encodedNewPassword = passwordEncoder.encode(resetPasswordRequestDto.getPassword());
+      user.setPassword(encodedNewPassword);
+      usersRepository.save(user);
+      return "Reset Password success";
+    }
+    throw new ApplicationException("User not found");
   }
 }

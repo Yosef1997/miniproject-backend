@@ -21,7 +21,7 @@ public class UsersController {
     this.usersService = usersService;
   }
 
-  @GetMapping("/")
+  @GetMapping()
   public ResponseEntity<Response<List<Users>>> getAllUsers() {
     return Response.successResponse("All registered users", usersService.getAllUser());
   }
