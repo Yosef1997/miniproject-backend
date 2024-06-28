@@ -53,7 +53,7 @@ public class Response<T> {
   }
 
   public static <T> ResponseEntity<Response<T>> successResponse (T data) {
-    return successResponse(HttpStatus.BAD_REQUEST.value(),"Request Success", data);
+    return successResponse(HttpStatus.OK.value(),"Request Success", data);
   }
 
   public static <T> ResponseEntity<Response<T>> successResponse (String message, T data) {

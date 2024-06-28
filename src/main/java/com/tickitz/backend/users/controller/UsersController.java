@@ -30,4 +30,9 @@ public class UsersController {
   public ResponseEntity<?> register(@Validated @RequestBody RegisterDto registerDTO) {
     return Response.successResponse("User register success", usersService.register(registerDTO));
   }
+
+  @GetMapping("/profile")
+  public ResponseEntity<Response<Object>> getProfile() {
+    return Response.successResponse("Profile fetch success", usersService.getProfile());
+  }
 }

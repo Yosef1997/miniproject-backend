@@ -6,4 +6,5 @@ import org.springframework.security.core.Authentication;
 public interface AuthService {
   String generateToken(Authentication authentication);
   String resetPassword(ResetPasswordRequestDto resetPasswordRequestDto);
+  String logout();
 }

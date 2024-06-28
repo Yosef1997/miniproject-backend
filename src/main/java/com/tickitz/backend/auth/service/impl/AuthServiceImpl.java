@@ -1,6 +1,7 @@
 package com.tickitz.backend.auth.service.impl;
 
 import com.tickitz.backend.auth.dto.ResetPasswordRequestDto;
+import com.tickitz.backend.auth.helpers.Claims;
 import com.tickitz.backend.auth.repository.AuthRedisRepository;
 import com.tickitz.backend.auth.service.AuthService;
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
@@ -59,6 +60,11 @@ public class AuthServiceImpl implements AuthService {
             .build();
 
     var jwt = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+
+    if (authRedisRepository.isKeyBlacklisted(jwt)) {
+      throw new ApplicationException("Token has been blacklisted");
+    }
+
     authRedisRepository.saveJwtKey(authentication.getName(), jwt);
     return jwt;
   }
@@ -75,4 +81,16 @@ public class AuthServiceImpl implements AuthService {
     }
     throw new ApplicationException("User not found");
   }
+
+  @Override
+  public String logout() {
+    var claims = Claims.getClaimsFromJwt();
+    var email = (String) claims.get("sub");
+    String jwt = authRedisRepository.getJwtKey(email);
+    authRedisRepository.blackListJwt(email, jwt);
+    authRedisRepository.deleteJwtKey(email);
+    return "Logout success";
+  }
+
+
 }

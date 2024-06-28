@@ -1,5 +1,6 @@
 package com.tickitz.backend.users.service;
 
+import com.tickitz.backend.auth.helpers.Claims;
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
 import com.tickitz.backend.users.dto.RegisterDto;
 import com.tickitz.backend.users.entity.Users;
@@ -40,4 +41,12 @@ public class UsersServiceImpl implements UsersService{
   public List<Users> getAllUser() {
     return usersRepository.findAll();
   }
+
+  @Override
+  public Users getProfile() {
+    var claims = Claims.getClaimsFromJwt();
+    var email = (String) claims.get("sub");
+    return usersRepository.findByEmail(email).orElseThrow(()->new ApplicationException("Profile not found"));
+  }
+
 }

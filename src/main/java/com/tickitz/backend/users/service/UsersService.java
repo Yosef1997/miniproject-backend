@@ -8,5 +8,6 @@ import java.util.List;
 public interface UsersService {
   Users register(RegisterDto requestRegister);
   List<Users> getAllUser();
+  Users getProfile();
 
 }

@@ -7,6 +7,7 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.tickitz.backend.auth.service.impl.UserDetailsServiceImpl;
+import jakarta.servlet.http.Cookie;
 import lombok.extern.java.Log;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -69,7 +70,20 @@ public class SecurityConfig {
               auth.anyRequest().authenticated();
             })
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .oauth2ResourceServer((oauth2) -> oauth2.jwt((jwt) -> jwt.decoder(jwtDecoder())))
+            .oauth2ResourceServer((oauth2) -> {
+                      oauth2.jwt((jwt) -> jwt.decoder(jwtDecoder()));
+                      oauth2.bearerTokenResolver(request -> {
+                        Cookie[] cookies = request.getCookies();
+                        if (cookies != null) {
+                          for (Cookie cookie : cookies) {
+                            if ("sid".equals(cookie.getName())) {
+                              return cookie.getValue();
+                            }
+                          }
+                        }
+                        return null;
+                      });
+            })
             .userDetailsService(userDetailsService)
             .httpBasic(Customizer.withDefaults())
             .build();

@@ -1,6 +1,5 @@
 package com.tickitz.backend.auth.controller;
 
-import com.nimbusds.jose.proc.SecurityContext;
 import com.tickitz.backend.auth.dto.LoginRequestDto;
 import com.tickitz.backend.auth.dto.LoginResponseDto;
 import com.tickitz.backend.auth.dto.ResetPasswordRequestDto;
@@ -51,13 +50,23 @@ public class AuthController {
     loginResponseDto.setToken(token);
 
     Cookie cookie = new Cookie("sid", token);
+    cookie.setMaxAge(24 * 60 * 60);
     HttpHeaders headers = new HttpHeaders();
     headers.add("Set-Cookie", cookie.getName() + "=" + cookie.getValue() + "; Path=/; HttpOnly");
-    return ResponseEntity.status(HttpStatus.OK).headers(headers).body(loginResponseDto);
+    return ResponseEntity.status(HttpStatus.OK).headers(headers).body(Response.successResponse(loginResponseDto).getBody());
   }
 
   @PostMapping("/forgot-password")
-  public ResponseEntity<Response<Object>> forgotPassword (@RequestBody ResetPasswordRequestDto resetPasswordRequestDto) {
+  public ResponseEntity<Response<Object>> forgotPassword(@RequestBody ResetPasswordRequestDto resetPasswordRequestDto) {
     return Response.successResponse(authService.resetPassword(resetPasswordRequestDto));
+  }
+
+  @PostMapping("/logout")
+  public ResponseEntity<?> logout() {
+    Cookie cookie = new Cookie("sid", null);
+    cookie.setMaxAge(0);
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Set-Cookie", cookie.getName() + "=" + cookie.getValue() + "; Path=/; HttpOnly; Max-Age=0");
+    return ResponseEntity.status(HttpStatus.OK).headers(headers).body(Response.successResponse(authService.logout()).getBody());
   }
 }
