@@ -1,7 +1,7 @@
 package com.tickitz.backend.users.service;
 
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
-import com.tickitz.backend.users.dto.RegisterDTO;
+import com.tickitz.backend.users.dto.RegisterDto;
 import com.tickitz.backend.users.entity.Users;
 import com.tickitz.backend.users.repository.UsersRepository;
 import lombok.extern.java.Log;
@@ -24,7 +24,7 @@ public class UsersServiceImpl implements UsersService{
 
 
   @Override
-  public Users register(RegisterDTO requestRegister) {
+  public Users register(RegisterDto requestRegister) {
     Optional<Users> exists = usersRepository.findByEmail(requestRegister.getEmail());
     if (exists.isPresent()) {
       throw new ApplicationException("Email already exists");

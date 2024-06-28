@@ -1,6 +1,7 @@
 package com.tickitz.backend.auth.service.impl;
 
 import com.tickitz.backend.auth.dto.ResetPasswordRequestDto;
+import com.tickitz.backend.auth.repository.AuthRedisRepository;
 import com.tickitz.backend.auth.service.AuthService;
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
 import com.tickitz.backend.users.entity.Users;
@@ -23,15 +24,14 @@ import java.util.stream.Collectors;
 @Log
 public class AuthServiceImpl implements AuthService {
   private final JwtEncoder jwtEncoder;
-
   private final PasswordEncoder passwordEncoder;
-
   private final UsersRepository usersRepository;
-
-  public AuthServiceImpl (JwtEncoder jwtEncoder, PasswordEncoder passwordEncoder, UsersRepository usersRepository) {
+  private final AuthRedisRepository authRedisRepository;
+  public AuthServiceImpl (JwtEncoder jwtEncoder, PasswordEncoder passwordEncoder, UsersRepository usersRepository, AuthRedisRepository authRedisRepository) {
     this.jwtEncoder = jwtEncoder;
     this.passwordEncoder = passwordEncoder;
     this.usersRepository = usersRepository;
+    this.authRedisRepository =authRedisRepository;
   }
 
   @Override
@@ -43,15 +43,24 @@ public class AuthServiceImpl implements AuthService {
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(""));
 
+    var existingKey = authRedisRepository.getJwtKey(authentication.getName());
+    if (existingKey !=null) {
+      log.info("Token already exists for user: " + authentication.getName()) ;
+      return existingKey;
+    }
+
     JwtClaimsSet claims = JwtClaimsSet.builder()
             .issuer("self")
             .issuedAt(now)
             .expiresAt(now.plus(10, ChronoUnit.HOURS))
             .subject(authentication.getName())
             .claim("scope", scope)
+            .claim("userId", usersRepository.findByEmail(authentication.getName()).get().getId())
             .build();
 
-    return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    var jwt = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    authRedisRepository.saveJwtKey(authentication.getName(), jwt);
+    return jwt;
   }
 
   @Override
