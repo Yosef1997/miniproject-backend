@@ -1,6 +1,7 @@
 package com.tickitz.backend.users.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tickitz.backend.point.entity.Point;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -10,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", schema = "miniproj")
@@ -49,8 +51,8 @@ public class Users {
   @Column(name="referral_code", nullable = false)
   private String referralCode;
 
-  @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-  private int points;
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Point> point;
 
   @NotNull
   @ColumnDefault("CURRENT_TIMESTAMP")
