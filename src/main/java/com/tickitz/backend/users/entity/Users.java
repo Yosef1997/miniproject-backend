@@ -46,6 +46,10 @@ public class Users {
   private Role role;
 
   @NotNull
+  @Column(name="referral_code", nullable = false)
+  private String referralCode;
+
+  @NotNull
   @ColumnDefault("CURRENT_TIMESTAMP")
   @Column(name = "created_at", nullable = false)
   private Instant createdAt;
