@@ -49,6 +49,9 @@ public class Users {
   @Column(name="referral_code", nullable = false)
   private String referralCode;
 
+  @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+  private int points;
+
   @NotNull
   @ColumnDefault("CURRENT_TIMESTAMP")
   @Column(name = "created_at", nullable = false)
