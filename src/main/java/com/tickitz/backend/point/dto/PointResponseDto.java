@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class PointResponseDto {
   private Long Id;
-  private Integer point;
+  private Long point;
   @Column(name = "user_id")
   private Long userId;
 }

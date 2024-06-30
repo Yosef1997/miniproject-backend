@@ -22,9 +22,8 @@ public class Point {
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
 
-  @Min(value = 0, message = "Point must be non-negative")
   @Column(nullable = false)
-  private Integer point;
+  private Long point;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
