@@ -1,6 +1,7 @@
 package com.tickitz.backend.point.controller;
 
 import com.tickitz.backend.point.dao.ResponsePointDao;
+import com.tickitz.backend.point.dto.PointRequestDto;
 import com.tickitz.backend.point.dto.PointResponseDto;
 import com.tickitz.backend.point.service.PointService;
 import com.tickitz.backend.response.Response;
@@ -27,9 +28,9 @@ public class PointController {
     return Response.successResponse("Points data fetched", pointService.getAllPoints());
   }
 
-  @PostMapping("/{id}")
-  public ResponseEntity<Response<PointResponseDto>> createPoint(@PathVariable Long id) {
-    return Response.successResponse("Add Point success to user id " + id, pointService.createPoints(id));
+  @PostMapping
+  public ResponseEntity<Response<PointResponseDto>> createPoint(@RequestBody PointRequestDto requestDto) {
+    return Response.successResponse("Add Point success to user id " + requestDto.getId(), pointService.createPoints(requestDto));
   }
 
   @GetMapping("/{id}")

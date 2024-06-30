@@ -2,6 +2,7 @@ package com.tickitz.backend.point.service.impl;
 
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
 import com.tickitz.backend.point.dao.ResponsePointDao;
+import com.tickitz.backend.point.dto.PointRequestDto;
 import com.tickitz.backend.point.dto.PointResponseDto;
 import com.tickitz.backend.point.entity.Point;
 import com.tickitz.backend.point.repository.PointRepository;
@@ -33,10 +34,10 @@ public class PointServiceImpl implements PointService {
   }
 
   @Override
-  public PointResponseDto createPoints(Long id) {
-    Users user = usersRepository.findById(id).orElseThrow(()-> new ApplicationException("User not exists"));
+  public PointResponseDto createPoints(PointRequestDto requestDto) {
+    Users user = usersRepository.findById(requestDto.getId()).orElseThrow(()-> new ApplicationException("User not exists"));
     Point point = new Point();
-    point.setPoint(10000);
+    point.setPoint(requestDto.getPoint());
     point.setUser(user);
 
     pointRepository.save(point);
