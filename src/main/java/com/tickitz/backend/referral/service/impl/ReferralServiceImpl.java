@@ -2,6 +2,7 @@ package com.tickitz.backend.referral.service.impl;
 
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
 import com.tickitz.backend.referral.dao.ResponseReferralDao;
+import com.tickitz.backend.referral.dto.ReferralRequestDto;
 import com.tickitz.backend.referral.dto.ReferralResponseDto;
 import com.tickitz.backend.referral.dto.UpdateRequestDto;
 import com.tickitz.backend.referral.entity.Referral;
@@ -34,10 +35,11 @@ public class ReferralServiceImpl implements ReferralService {
   }
 
   @Override
-  public ReferralResponseDto createReferral(Long id) {
-    Users user = usersRepository.findById(id).orElseThrow(()-> new ApplicationException("User not exists"));
+  public ReferralResponseDto createReferral(ReferralRequestDto referralRequestDto) {
+    Users user = usersRepository.findById(referralRequestDto.getId()).orElseThrow(()-> new ApplicationException("User not exists"));
+
     Referral referral =new Referral();
-    referral.setVoucherName("Referral for " + user.getUsername());
+    referral.setVoucherName("Referral for " + referralRequestDto.getReferralCode());
     referral.setDiscountPercentage(10);
     referral.setUser(user);
     referral.setStatus(true);

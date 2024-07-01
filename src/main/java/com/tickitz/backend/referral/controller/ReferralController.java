@@ -1,6 +1,7 @@
 package com.tickitz.backend.referral.controller;
 
 import com.tickitz.backend.referral.dao.ResponseReferralDao;
+import com.tickitz.backend.referral.dto.ReferralRequestDto;
 import com.tickitz.backend.referral.dto.ReferralResponseDto;
 import com.tickitz.backend.referral.dto.UpdateRequestDto;
 import com.tickitz.backend.referral.service.ReferralService;
@@ -28,9 +29,9 @@ public class ReferralController {
     return Response.successResponse("All Referral fetched", referralService.getAllReferral());
   }
 
-  @PostMapping("/{id}")
-  public ResponseEntity<Response<ReferralResponseDto>> createReferral(@PathVariable Long id) {
-    return Response.successResponse("Add Referral success to user id " + id, referralService.createReferral(id));
+  @PostMapping
+  public ResponseEntity<Response<ReferralResponseDto>> createReferral(@RequestBody ReferralRequestDto referralRequestDto) {
+    return Response.successResponse("Add Referral success to user id " + referralRequestDto.getId(), referralService.createReferral(referralRequestDto));
   }
 
   @GetMapping("/{id}")

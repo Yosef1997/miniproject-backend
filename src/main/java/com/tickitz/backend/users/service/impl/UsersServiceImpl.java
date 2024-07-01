@@ -4,6 +4,7 @@ import com.tickitz.backend.auth.helpers.Claims;
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
 import com.tickitz.backend.point.dto.PointRequestDto;
 import com.tickitz.backend.point.service.PointService;
+import com.tickitz.backend.referral.dto.ReferralRequestDto;
 import com.tickitz.backend.referral.dto.ReferralResponseDto;
 import com.tickitz.backend.referral.entity.Referral;
 import com.tickitz.backend.referral.service.ReferralService;
@@ -61,7 +62,10 @@ public class UsersServiceImpl implements UsersService {
     if (requestRegister.getRole() == Users.Role.CUSTOMER && !Objects.equals(requestRegister.getReferral(), "")) {
       Optional<Users> referrer = usersRepository.findByReferralCode(requestRegister.getReferral());
       if (referrer.isPresent()) {
-        var savedReferral = referralService.createReferral(savedUser.getId());
+        ReferralRequestDto referralRequestDto = new ReferralRequestDto();
+        referralRequestDto.setId(savedUser.getId());
+        referralRequestDto.setReferralCode(requestRegister.getReferral());
+        var savedReferral = referralService.createReferral(referralRequestDto);
         referral.setId(savedUser.getId());
         referral.setVoucherName(savedReferral.getVoucherName());
         referral.setDiscountPercentage(savedReferral.getDiscountPercentage());
