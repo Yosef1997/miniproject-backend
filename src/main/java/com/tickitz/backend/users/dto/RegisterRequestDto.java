@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class RegisterDto {
+public class RegisterRequestDto {
   @NotNull
   @NotBlank(message = "Email is required")
   private String email;

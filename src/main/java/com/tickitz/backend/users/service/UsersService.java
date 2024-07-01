@@ -1,13 +1,14 @@
 package com.tickitz.backend.users.service;
 
-import com.tickitz.backend.users.dto.RegisterDto;
+import com.tickitz.backend.users.dto.RegisterRequestDto;
+import com.tickitz.backend.users.dto.ResponseUserDto;
 import com.tickitz.backend.users.entity.Users;
 
 import java.util.List;
 
 public interface UsersService {
-  Users register(RegisterDto requestRegister);
+  ResponseUserDto register(RegisterRequestDto requestRegister);
   List<Users> getAllUser();
-  Users getProfile();
+  ResponseUserDto getProfile();
 
 }

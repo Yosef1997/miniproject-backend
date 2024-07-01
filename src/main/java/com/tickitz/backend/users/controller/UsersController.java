@@ -1,7 +1,7 @@
 package com.tickitz.backend.users.controller;
 
 import com.tickitz.backend.response.Response;
-import com.tickitz.backend.users.dto.RegisterDto;
+import com.tickitz.backend.users.dto.RegisterRequestDto;
 import com.tickitz.backend.users.entity.Users;
 import com.tickitz.backend.users.service.UsersService;
 import lombok.extern.java.Log;
@@ -27,7 +27,7 @@ public class UsersController {
   }
 
   @PostMapping("/register")
-  public ResponseEntity<?> register(@Validated @RequestBody RegisterDto registerDTO) {
+  public ResponseEntity<?> register(@Validated @RequestBody RegisterRequestDto registerDTO) {
     return Response.successResponse("User register success", usersService.register(registerDTO));
   }
 

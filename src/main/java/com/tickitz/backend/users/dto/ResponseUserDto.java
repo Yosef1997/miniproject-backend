@@ -1,7 +1,9 @@
 package com.tickitz.backend.users.dto;
 
+import com.tickitz.backend.referral.dto.ReferralResponseDto;
 import com.tickitz.backend.users.entity.Users;
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 @Data
@@ -10,7 +12,8 @@ public class ResponseUserDto {
   private String username;
   private String email;
   private String role;
-  @Column(name = "referral_code")
   private String referralCode;
-  private Integer point;
+  @Min(value = 0)
+  private Long point;
+  private Object referralVoucher;
 }

@@ -2,6 +2,7 @@ package com.tickitz.backend.users.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tickitz.backend.point.entity.Point;
+import com.tickitz.backend.referral.entity.Referral;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -53,6 +54,9 @@ public class Users {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Point> point;
+
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Referral referral;
 
   @NotNull
   @ColumnDefault("CURRENT_TIMESTAMP")
