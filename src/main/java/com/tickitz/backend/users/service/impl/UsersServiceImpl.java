@@ -8,6 +8,7 @@ import com.tickitz.backend.referral.dto.ReferralRequestDto;
 import com.tickitz.backend.referral.dto.ReferralResponseDto;
 import com.tickitz.backend.referral.entity.Referral;
 import com.tickitz.backend.referral.service.ReferralService;
+import com.tickitz.backend.users.dao.ResponseUserDao;
 import com.tickitz.backend.users.dto.RegisterRequestDto;
 import com.tickitz.backend.users.dto.ResponseUserDto;
 import com.tickitz.backend.users.entity.Users;
@@ -99,8 +100,8 @@ public class UsersServiceImpl implements UsersService {
   }
 
   @Override
-  public List<Users> getAllUser() {
-    return usersRepository.findAll();
+  public List<ResponseUserDao> getAllUser() {
+    return usersRepository.findAllUser();
   }
 
   @Override

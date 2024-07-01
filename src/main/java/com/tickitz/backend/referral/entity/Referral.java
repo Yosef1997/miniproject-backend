@@ -1,5 +1,6 @@
 package com.tickitz.backend.referral.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tickitz.backend.users.entity.Users;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -34,6 +35,7 @@ public class Referral {
   @Column(nullable = false)
   private Boolean status;
 
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   private Users user;

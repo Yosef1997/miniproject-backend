@@ -1,6 +1,7 @@
 package com.tickitz.backend.users.controller;
 
 import com.tickitz.backend.response.Response;
+import com.tickitz.backend.users.dao.ResponseUserDao;
 import com.tickitz.backend.users.dto.RegisterRequestDto;
 import com.tickitz.backend.users.entity.Users;
 import com.tickitz.backend.users.service.UsersService;
@@ -22,7 +23,7 @@ public class UsersController {
   }
 
   @GetMapping()
-  public ResponseEntity<Response<List<Users>>> getAllUsers() {
+  public ResponseEntity<Response<List<ResponseUserDao>>> getAllUsers() {
     return Response.successResponse("All registered users", usersService.getAllUser());
   }
 
