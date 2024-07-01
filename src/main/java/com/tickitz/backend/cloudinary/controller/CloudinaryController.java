@@ -4,10 +4,7 @@ import com.tickitz.backend.cloudinary.service.CloudinaryService;
 import com.tickitz.backend.response.Response;
 import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -15,7 +12,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/v1/upload-image")
 @Log
-public class CloudinaryController  {
+public class CloudinaryController {
   private final CloudinaryService cloudinaryService;
 
   public CloudinaryController(CloudinaryService cloudinaryService) {
@@ -23,12 +20,23 @@ public class CloudinaryController  {
   }
 
   @PostMapping("/")
-  public ResponseEntity<Response<Object>> handleImageUpload(@RequestParam("file")MultipartFile file) {
+  public ResponseEntity<Response<Object>> handleImageUpload(@RequestParam("file") MultipartFile file) {
     try {
-      String imageUrl = cloudinaryService.uploadImage(file);
+      Object imageUrl = cloudinaryService.uploadImage(file);
       return Response.successResponse("Upload Image Success", imageUrl);
     } catch (IOException e) {
       return Response.failedResponse("Upload Image Failed", e);
+    }
+  }
+
+  @PutMapping("/update")
+  public ResponseEntity<Response<Object>> handleImageUpdate(@RequestParam("publicId") String publicId,
+                                                            @RequestParam("file") MultipartFile file) {
+    try {
+      Object imageUrl = cloudinaryService.updateImage(file, publicId);
+      return Response.successResponse("Update image success", imageUrl);
+    } catch (IOException e) {
+      return Response.failedResponse("Update image failed");
     }
   }
 }
