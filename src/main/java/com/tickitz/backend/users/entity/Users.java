@@ -1,6 +1,7 @@
 package com.tickitz.backend.users.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tickitz.backend.event.entity.Event;
 import com.tickitz.backend.point.entity.Point;
 import com.tickitz.backend.referral.entity.Referral;
 import jakarta.persistence.*;
@@ -52,11 +53,17 @@ public class Users {
   @Column(name="referral_code", nullable = false)
   private String referralCode;
 
+  @JsonIgnore
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Point> point;
 
+  @JsonIgnore
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Referral referral;
+
+  @JsonIgnore
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Event> event;
 
   @NotNull
   @ColumnDefault("CURRENT_TIMESTAMP")
