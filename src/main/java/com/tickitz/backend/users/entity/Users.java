@@ -53,11 +53,11 @@ public class Users {
   @Column(name="referral_code", nullable = false)
   private String referralCode;
 
-  @JsonIgnore
+
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Point> point;
 
-  @JsonIgnore
+
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Referral referral;
 

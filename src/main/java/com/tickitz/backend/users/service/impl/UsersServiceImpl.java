@@ -1,16 +1,18 @@
 package com.tickitz.backend.users.service.impl;
 
+import com.tickitz.backend.auth.dto.ResetPasswordRequestDto;
 import com.tickitz.backend.auth.helpers.Claims;
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
 import com.tickitz.backend.point.dto.PointRequestDto;
 import com.tickitz.backend.point.service.PointService;
 import com.tickitz.backend.referral.dto.ReferralRequestDto;
 import com.tickitz.backend.referral.dto.ReferralResponseDto;
-import com.tickitz.backend.referral.entity.Referral;
 import com.tickitz.backend.referral.service.ReferralService;
 import com.tickitz.backend.users.dao.ResponseUserDao;
 import com.tickitz.backend.users.dto.RegisterRequestDto;
 import com.tickitz.backend.users.dto.ResponseUserDto;
+import com.tickitz.backend.users.dto.UpdateUserRequestDto;
+import com.tickitz.backend.users.dto.UpdateUserResponseDto;
 import com.tickitz.backend.users.entity.Users;
 import com.tickitz.backend.users.repository.UsersRepository;
 import com.tickitz.backend.users.service.UsersService;
@@ -86,7 +88,7 @@ public class UsersServiceImpl implements UsersService {
     responseUserDto.setEmail(savedUser.getEmail());
     responseUserDto.setRole(savedUser.getRole().name());
     responseUserDto.setReferralCode(savedUser.getReferralCode());
-    if(savedUser.getRole() == Users.Role.ORGANIZER) {
+    if (savedUser.getRole() == Users.Role.ORGANIZER) {
       responseUserDto.setPoint(0L);
     } else {
       responseUserDto.setPoint(pointService.getPointUser(savedUser.getId()));
@@ -108,7 +110,7 @@ public class UsersServiceImpl implements UsersService {
   public ResponseUserDto getProfile() {
     var claims = Claims.getClaimsFromJwt();
     var email = (String) claims.get("sub");
-    Users user = usersRepository.findByEmail(email).orElseThrow(()->new ApplicationException("Profile not found"));
+    Users user = usersRepository.findByEmail(email).orElseThrow(() -> new ApplicationException("Profile not found"));
     ResponseUserDto responseUserDto = new ResponseUserDto();
     responseUserDto.setId(user.getId());
     responseUserDto.setUsername(user.getUsername());
@@ -118,5 +120,41 @@ public class UsersServiceImpl implements UsersService {
     responseUserDto.setPoint(pointService.getPointUser(user.getId()));
     return responseUserDto;
   }
+
+  @Override
+  public UpdateUserResponseDto updateUser(UpdateUserRequestDto updateUserRequestDto) {
+    Users user = usersRepository.findByEmail(updateUserRequestDto.getEmail()).orElseThrow(() -> new ApplicationException("User not exists"));
+    user.setUsername(updateUserRequestDto.getUsername());
+    user.setEmail(updateUserRequestDto.getEmail());
+    user.setPassword(passwordEncoder.encode(updateUserRequestDto.getPassword()));
+    user.setAvatar(updateUserRequestDto.getAvatar());
+
+    Users updatedUser = usersRepository.save(user);
+
+    UpdateUserResponseDto response = new UpdateUserResponseDto();
+    response.setId(updatedUser.getId());
+    response.setUsername(updatedUser.getUsername());
+    response.setEmail(updatedUser.getEmail());
+    response.setAvatar(updatedUser.getAvatar());
+    response.setRole(updatedUser.getRole().name());
+    response.setPoint(pointService.getPointUser(updatedUser.getId()));
+    response.setReferral(referralService.getReferralUser(updatedUser.getId()));
+    return response;
+  }
+
+  @Override
+  public ResponseUserDto getDetailUser(String email) {
+    Users user = usersRepository.findByEmail(email).orElseThrow(() -> new ApplicationException("User not exists"));
+    ResponseUserDto response = new ResponseUserDto();
+    response.setId(user.getId());
+    response.setUsername(user.getUsername());
+    response.setEmail(user.getEmail());
+    response.setRole(user.getRole().name());
+    response.setReferralCode(user.getReferralCode());
+    response.setPoint(pointService.getPointUser(user.getId()));
+    response.setReferralVoucher(referralService.getReferralUser(user.getId()));
+    return response;
+  }
+
 
 }
