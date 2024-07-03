@@ -85,6 +85,7 @@ public class UsersServiceImpl implements UsersService {
     ResponseUserDto responseUserDto = new ResponseUserDto();
     responseUserDto.setId(savedUser.getId());
     responseUserDto.setUsername(savedUser.getUsername());
+    responseUserDto.setAvatar(savedUser.getAvatar());
     responseUserDto.setEmail(savedUser.getEmail());
     responseUserDto.setRole(savedUser.getRole().name());
     responseUserDto.setReferralCode(savedUser.getReferralCode());
@@ -111,9 +112,11 @@ public class UsersServiceImpl implements UsersService {
     var claims = Claims.getClaimsFromJwt();
     var email = (String) claims.get("sub");
     Users user = usersRepository.findByEmail(email).orElseThrow(() -> new ApplicationException("Profile not found"));
+    log.info("GetProfile >>>>" + user.toString());
     ResponseUserDto responseUserDto = new ResponseUserDto();
     responseUserDto.setId(user.getId());
     responseUserDto.setUsername(user.getUsername());
+    responseUserDto.setAvatar(user.getAvatar());
     responseUserDto.setEmail(user.getEmail());
     responseUserDto.setRole(user.getRole().name());
     responseUserDto.setReferralCode(user.getReferralCode());
@@ -144,16 +147,21 @@ public class UsersServiceImpl implements UsersService {
 
   @Override
   public ResponseUserDto getDetailUser(String email) {
-    Users user = usersRepository.findByEmail(email).orElseThrow(() -> new ApplicationException("User not exists"));
     ResponseUserDto response = new ResponseUserDto();
-    response.setId(user.getId());
-    response.setUsername(user.getUsername());
-    response.setEmail(user.getEmail());
-    response.setRole(user.getRole().name());
-    response.setReferralCode(user.getReferralCode());
-    response.setPoint(pointService.getPointUser(user.getId()));
-    response.setReferralVoucher(referralService.getReferralUser(user.getId()));
-    return response;
+    Optional<Users> user = usersRepository.findByEmail(email);
+    log.info("GetDetailUser >>>>" + user.toString());
+    if (user.isPresent()) {
+      response.setId(user.get().getId());
+      response.setUsername(user.get().getUsername());
+      response.setAvatar(user.get().getAvatar());
+      response.setEmail(user.get().getEmail());
+      response.setRole(user.get().getRole().name());
+      response.setReferralCode(user.get().getReferralCode());
+      response.setPoint(pointService.getPointUser(user.get().getId()));
+      response.setReferralVoucher(referralService.getReferralUser(user.get().getId()));
+      return response;
+    }
+    return null;
   }
 
 

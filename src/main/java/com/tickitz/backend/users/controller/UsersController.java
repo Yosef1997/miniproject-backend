@@ -42,12 +42,12 @@ public class UsersController {
   }
 
   @PutMapping("/profile")
-  public ResponseEntity<Response<UpdateUserResponseDto>> updateUser(UpdateUserRequestDto updateUserRequestDto) {
+  public ResponseEntity<Response<UpdateUserResponseDto>> updateUser(@RequestBody UpdateUserRequestDto updateUserRequestDto) {
     return Response.successResponse("Update User Success", usersService.updateUser(updateUserRequestDto));
   }
 
-  @GetMapping("/detail")
-  public ResponseEntity<Response<ResponseUserDto>> getDetailUser(@RequestBody String email) {
+  @GetMapping("/detail/{email}")
+  public ResponseEntity<Response<ResponseUserDto>> getDetailUser(@PathVariable String email) {
     return Response.successResponse("Get Detail User Success", usersService.getDetailUser(email));
   }
 

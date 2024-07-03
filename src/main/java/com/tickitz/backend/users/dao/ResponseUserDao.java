@@ -7,6 +7,6 @@ public interface ResponseUserDao {
   String getEmail();
   String getRole();
   String getReferralCode();
-  String getPoint();
+  Long getPoint();
   Object getReferral();
 }
