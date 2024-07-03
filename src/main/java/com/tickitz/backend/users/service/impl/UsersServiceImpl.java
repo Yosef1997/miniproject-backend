@@ -69,7 +69,7 @@ public class UsersServiceImpl implements UsersService {
         referralRequestDto.setId(savedUser.getId());
         referralRequestDto.setReferralCode(requestRegister.getReferral());
         var savedReferral = referralService.createReferral(referralRequestDto);
-        referral.setId(savedUser.getId());
+        referral.setId(savedReferral.getId());
         referral.setVoucherName(savedReferral.getVoucherName());
         referral.setDiscountPercentage(savedReferral.getDiscountPercentage());
         referral.setStatus(savedReferral.getStatus());
