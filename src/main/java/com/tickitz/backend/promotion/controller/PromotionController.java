@@ -1,7 +1,9 @@
 package com.tickitz.backend.promotion.controller;
 
-import com.tickitz.backend.promotion.dto.PromotionDto;
-import com.tickitz.backend.promotion.entity.Promotion;
+import com.tickitz.backend.promotion.dao.PromotionDao;
+import com.tickitz.backend.promotion.dto.CreatePromoRequestDto;
+import com.tickitz.backend.promotion.dto.PromoResponseDto;
+import com.tickitz.backend.promotion.dto.UpdatePromoRequestDto;
 import com.tickitz.backend.promotion.service.PromotionService;
 import com.tickitz.backend.response.Response;
 import lombok.extern.java.Log;
@@ -10,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/promotion")
@@ -25,23 +26,23 @@ public class PromotionController {
 
 
   @GetMapping
-  public ResponseEntity<Response<List<Promotion>>> getAllPromotion(){
-    return Response.successResponse("All Promotions Fetched", promotionService.getAllPromotions());
+  public ResponseEntity<Response<List<PromotionDao>>> getAllPromotion(@RequestParam(name = "eventId",required = false) Long eventId){
+    return Response.successResponse("All Promotions Fetched", promotionService.getAllPromotions(eventId));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Response<Optional<Promotion>>> getDetailPromotion(@PathVariable Long id) {
+  public ResponseEntity<Response<PromoResponseDto>> getDetailPromotion(@PathVariable Long id) {
     return Response.successResponse("Get Detail Event Success", promotionService.getDetailPromotion(id));
   }
 
   @PostMapping
-  public ResponseEntity<Response<Promotion>> createPromotion(@RequestBody PromotionDto promotionDto) {
-    return Response.successResponse("Create Promotion Success", promotionService.createPromotion(promotionDto));
+  public ResponseEntity<Response<PromoResponseDto>> createPromotion(@RequestBody CreatePromoRequestDto createPromoRequestDto) {
+    return Response.successResponse("Create Promotion Success", promotionService.createPromotion(createPromoRequestDto));
   }
 
   @PutMapping
-  public ResponseEntity<Response<Promotion>> updatePromotion(@RequestBody PromotionDto promotionDto) {
-    return Response.successResponse("Update Promotion Success", promotionService.updatePromotion(promotionDto));
+  public ResponseEntity<Response<PromoResponseDto>> updatePromotion(@RequestBody UpdatePromoRequestDto updatePromoRequestDto) {
+    return Response.successResponse("Update Promotion Success", promotionService.updatePromotion(updatePromoRequestDto));
   }
 
   @DeleteMapping("/{id}")

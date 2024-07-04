@@ -46,12 +46,9 @@ public class Promotion {
   @Column(name = "expired_date", nullable = false)
   private Instant expiredDate;
 
-  @Column(name = "event_id", nullable = false)
-  private Long eventId;
-
-  @JsonIgnore
-  @ManyToMany(mappedBy = "promotions")
-  private List<Event> events;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "event_id", nullable = false)
+  private Event event;
 
   @NotNull
   @ColumnDefault("CURRENT_TIMESTAMP")

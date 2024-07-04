@@ -75,12 +75,7 @@ public class Event {
   @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Ticket> tickets = new ArrayList<>();
 
-  @ManyToMany
-  @JoinTable(
-          name = "event_promotion",
-          joinColumns = @JoinColumn(name = "event_id"),
-          inverseJoinColumns = @JoinColumn(name = "promotion_id")
-  )
+  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Promotion> promotions = new ArrayList<>();
 
   @NotNull
