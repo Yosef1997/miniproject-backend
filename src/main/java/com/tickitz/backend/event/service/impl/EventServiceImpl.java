@@ -45,77 +45,77 @@ public class EventServiceImpl implements EventService {
 
   @Override
   public Event createEvent(RequestEventDto requestEventDto) {
-    Users user = usersRepository.findById(requestEventDto.getUserId()).orElseThrow(() -> new ApplicationException("User not found"));
-    if (!user.getRole().name().equals(Users.Role.ORGANIZER.name())) {
-      throw new ApplicationException("Only Organizer can create an event");
-    }
-    Optional<Event> eventExists = eventRepository.findByEventName(requestEventDto.getEventImage());
-
-    if (eventExists.isPresent()){
-      throw new ApplicationException("Event name already exists");
-    }
-
-    Event event = new Event();
-    event.setEventName(requestEventDto.getEventName());
-    event.setEventImage(requestEventDto.getEventImage());
-    event.setCategory(requestEventDto.getCategory());
-    event.setDate(Instant.parse(requestEventDto.getDate()));
-    event.setStartTime(Instant.parse(requestEventDto.getStartTime()));
-    event.setEndTime(Instant.parse(requestEventDto.getEndTime()));
-    event.setLocation(requestEventDto.getLocation());
-    event.setVenue(requestEventDto.getVenue());
-    event.setDescription(requestEventDto.getDescription());
-    event.setUser(user);
-    Event savedEvent = eventRepository.save(event);
-
-
-    List<Ticket> tickets = new ArrayList<>();
-    for (Ticket eventType : requestEventDto.getTickets()) {
-      Ticket existingTicket = ticketRepository.findByName(eventType.getName())
-              .orElseGet(() -> {
-                Ticket newTicket = new Ticket();
-                newTicket.setName(eventType.getName());
-                newTicket.setSeats(eventType.getSeats());
-                newTicket.setPrice(eventType.getPrice());
-                newTicket.setEventId(savedEvent.getId());
-                return ticketRepository.save(newTicket);
-              });
-      tickets.add(existingTicket);
-    }
-
-    List<Promotion> promotions = new ArrayList<>();
-    for (Promotion promotion : requestEventDto.getPromotions()) {
-      Promotion existingPromotion = promotionRepository.findByName(promotion.getName())
-              .orElseGet(() -> {
-                Promotion newPromotion = new Promotion();
-                newPromotion.setName(promotion.getName());
-                newPromotion.setType(promotion.getType());
-                newPromotion.setUsageLimit(promotion.getUsageLimit());
-                newPromotion.setDiscount(promotion.getDiscount());
-                newPromotion.setExpiredDate(promotion.getExpiredDate());
-                newPromotion.setEventId(savedEvent.getId());
-                return promotionRepository.save(newPromotion);
-              });
-      promotions.add(existingPromotion);
-    }
-
-    Event response = new Event();
-    response.setId(savedEvent.getId());
-    response.setEventName(savedEvent.getEventName());
-    response.setEventImage(savedEvent.getEventImage());
-    response.setCategory(savedEvent.getCategory());
-    response.setDate(savedEvent.getDate());
-    response.setStartTime(savedEvent.getStartTime());
-    response.setEndTime(savedEvent.getEndTime());
-    response.setLocation(savedEvent.getLocation());
-    response.setVenue(savedEvent.getVenue());
-    response.setDescription(savedEvent.getDescription());
-    response.setTickets(tickets);
-    response.setPromotions(promotions);
-    response.setCreatedAt(savedEvent.getCreatedAt());
-    response.setUpdatedAt(savedEvent.getUpdatedAt());
-    response.setDeletedAt(savedEvent.getDeletedAt());
-    return response;
+//    Users user = usersRepository.findById(requestEventDto.getUserId()).orElseThrow(() -> new ApplicationException("User not found"));
+//    if (!user.getRole().name().equals(Users.Role.ORGANIZER.name())) {
+//      throw new ApplicationException("Only Organizer can create an event");
+//    }
+//    Optional<Event> eventExists = eventRepository.findByEventName(requestEventDto.getEventImage());
+//
+//    if (eventExists.isPresent()){
+//      throw new ApplicationException("Event name already exists");
+//    }
+//
+//    Event event = new Event();
+//    event.setEventName(requestEventDto.getEventName());
+//    event.setEventImage(requestEventDto.getEventImage());
+//    event.setCategory(requestEventDto.getCategory());
+//    event.setDate(Instant.parse(requestEventDto.getDate()));
+//    event.setStartTime(Instant.parse(requestEventDto.getStartTime()));
+//    event.setEndTime(Instant.parse(requestEventDto.getEndTime()));
+//    event.setLocation(requestEventDto.getLocation());
+//    event.setVenue(requestEventDto.getVenue());
+//    event.setDescription(requestEventDto.getDescription());
+//    event.setUser(user);
+//    Event savedEvent = eventRepository.save(event);
+//
+//
+//    List<Ticket> tickets = new ArrayList<>();
+//    for (Ticket eventType : requestEventDto.getTickets()) {
+//      Ticket existingTicket = ticketRepository.findByName(eventType.getName())
+//              .orElseGet(() -> {
+//                Ticket newTicket = new Ticket();
+//                newTicket.setName(eventType.getName());
+//                newTicket.setSeats(eventType.getSeats());
+//                newTicket.setPrice(eventType.getPrice());
+//                newTicket.setEventId(savedEvent.getId());
+//                return ticketRepository.save(newTicket);
+//              });
+//      tickets.add(existingTicket);
+//    }
+//
+//    List<Promotion> promotions = new ArrayList<>();
+//    for (Promotion promotion : requestEventDto.getPromotions()) {
+//      Promotion existingPromotion = promotionRepository.findByName(promotion.getName())
+//              .orElseGet(() -> {
+//                Promotion newPromotion = new Promotion();
+//                newPromotion.setName(promotion.getName());
+//                newPromotion.setType(promotion.getType());
+//                newPromotion.setUsageLimit(promotion.getUsageLimit());
+//                newPromotion.setDiscount(promotion.getDiscount());
+//                newPromotion.setExpiredDate(promotion.getExpiredDate());
+//                newPromotion.setEventId(savedEvent.getId());
+//                return promotionRepository.save(newPromotion);
+//              });
+//      promotions.add(existingPromotion);
+//    }
+//
+//    Event response = new Event();
+//    response.setId(savedEvent.getId());
+//    response.setEventName(savedEvent.getEventName());
+//    response.setEventImage(savedEvent.getEventImage());
+//    response.setCategory(savedEvent.getCategory());
+//    response.setDate(savedEvent.getDate());
+//    response.setStartTime(savedEvent.getStartTime());
+//    response.setEndTime(savedEvent.getEndTime());
+//    response.setLocation(savedEvent.getLocation());
+//    response.setVenue(savedEvent.getVenue());
+//    response.setDescription(savedEvent.getDescription());
+//    response.setTickets(tickets);
+//    response.setPromotions(promotions);
+//    response.setCreatedAt(savedEvent.getCreatedAt());
+//    response.setUpdatedAt(savedEvent.getUpdatedAt());
+//    response.setDeletedAt(savedEvent.getDeletedAt());
+    return null;
   }
 
   @Override

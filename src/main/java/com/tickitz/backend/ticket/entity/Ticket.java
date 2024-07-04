@@ -2,6 +2,7 @@ package com.tickitz.backend.ticket.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tickitz.backend.event.entity.Event;
+import com.tickitz.backend.users.entity.Users;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -36,12 +37,9 @@ public class Ticket {
   @Column(nullable = false)
   private Long price;
 
-  @Column(name = "event_id", nullable = false)
-  private Long eventId;
-
-  @JsonIgnore
-  @ManyToMany(mappedBy = "tickets")
-  private List<Event> events;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "event_id", nullable = false)
+  private Event event;
 
   @NotNull
   @ColumnDefault("CURRENT_TIMESTAMP")

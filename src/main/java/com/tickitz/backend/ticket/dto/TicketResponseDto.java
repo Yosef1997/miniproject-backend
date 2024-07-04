@@ -3,7 +3,7 @@ package com.tickitz.backend.ticket.dto;
 import lombok.Data;
 
 @Data
-public class TicketDto {
+public class TicketResponseDto {
   private Long id;
   private String name;
   private Integer seats;

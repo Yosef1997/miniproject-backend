@@ -1,8 +1,10 @@
 package com.tickitz.backend.ticket.controller;
 
 import com.tickitz.backend.response.Response;
-import com.tickitz.backend.ticket.dto.TicketDto;
-import com.tickitz.backend.ticket.entity.Ticket;
+import com.tickitz.backend.ticket.dao.TicketDao;
+import com.tickitz.backend.ticket.dto.CreateTicketRequestDto;
+import com.tickitz.backend.ticket.dto.TicketResponseDto;
+import com.tickitz.backend.ticket.dto.UpdateTicketRequestDto;
 import com.tickitz.backend.ticket.service.TicketService;
 import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/ticket")
@@ -24,23 +25,23 @@ public class TicketController {
   }
 
   @GetMapping
-  public ResponseEntity<Response<List<Ticket>>> getAllTicket(){
-    return Response.successResponse("All Tickets Fetched", ticketService.getAllTickets());
+  public ResponseEntity<Response<List<TicketDao>>> getAllTicket(@RequestParam(name = "eventId", required = false) Long eventId){
+    return Response.successResponse("All Tickets Fetched", ticketService.getAllTickets(eventId));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Response<Optional<Ticket>>> getDetailTicket(@PathVariable Long id) {
+  public ResponseEntity<Response<TicketResponseDto>> getDetailTicket(@PathVariable Long id) {
     return Response.successResponse("Get Detail Event Success", ticketService.getDetailTicket(id));
   }
 
   @PostMapping
-  public ResponseEntity<Response<Ticket>> createTicket(@RequestBody TicketDto ticketDto) {
-    return Response.successResponse("Create Ticket Success", ticketService.createTicket(ticketDto));
+  public ResponseEntity<Response<TicketResponseDto>> createTicket(@RequestBody CreateTicketRequestDto createTicketRequestDto) {
+    return Response.successResponse("Create Ticket Success", ticketService.createTicket(createTicketRequestDto));
   }
 
   @PutMapping
-  public ResponseEntity<Response<Ticket>> updateTicket(@RequestBody TicketDto ticketDto) {
-    return Response.successResponse("Update Ticket Success", ticketService.updateTicket(ticketDto));
+  public ResponseEntity<Response<TicketResponseDto>> updateTicket(@RequestBody UpdateTicketRequestDto updateTicketRequestDto) {
+    return Response.successResponse("Update Ticket Success", ticketService.updateTicket(updateTicketRequestDto));
   }
 
   @DeleteMapping("/{id}")

@@ -72,12 +72,7 @@ public class Event {
   @JoinColumn(name = "user_id", nullable = false)
   private Users user;
 
-  @ManyToMany
-  @JoinTable(
-          name = "event_ticket",
-          joinColumns = @JoinColumn(name = "event_id"),
-          inverseJoinColumns = @JoinColumn(name = "ticket_id")
-  )
+  @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Ticket> tickets = new ArrayList<>();
 
   @ManyToMany
