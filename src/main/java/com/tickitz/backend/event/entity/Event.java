@@ -1,5 +1,6 @@
 package com.tickitz.backend.event.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tickitz.backend.ticket.entity.Ticket;
 import com.tickitz.backend.promotion.entity.Promotion;
 import com.tickitz.backend.users.entity.Users;
@@ -67,14 +68,16 @@ public class Event {
   @Column(name = "end_time", nullable = false)
   private Instant endTime;
 
-
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   private Users user;
 
+  @JsonIgnore
   @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Ticket> tickets = new ArrayList<>();
 
+  @JsonIgnore
   @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Promotion> promotions = new ArrayList<>();
 

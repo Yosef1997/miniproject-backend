@@ -1,6 +1,8 @@
 package com.tickitz.backend.event.controller;
 
-import com.tickitz.backend.event.dto.RequestEventDto;
+import com.tickitz.backend.event.dto.EventResponseDto;
+import com.tickitz.backend.event.dto.CreateEventRequestDto;
+import com.tickitz.backend.event.dto.UpdateEventRequestDto;
 import com.tickitz.backend.event.entity.Event;
 import com.tickitz.backend.event.service.EventService;
 import com.tickitz.backend.response.Response;
@@ -10,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/event")
@@ -29,13 +30,24 @@ public class EventController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Response<Optional<Event>>> getDetailEvent(@PathVariable Long id) {
+  public ResponseEntity<Response<EventResponseDto>> getDetailEvent(@PathVariable Long id) {
     return Response.successResponse("Get Detail Event Success", eventService.getDetailEvent(id));
   }
 
-  @PostMapping()
-  public ResponseEntity<Response<Event>> createEvent(
-          @RequestBody RequestEventDto requestEventDto) {
-    return Response.successResponse("Create event success", eventService.createEvent(requestEventDto));
+  @PostMapping
+  public ResponseEntity<Response<EventResponseDto>> createEvent(
+          @RequestBody CreateEventRequestDto createEventRequestDto) {
+    return Response.successResponse("Create event success", eventService.createEvent(createEventRequestDto));
+  }
+
+  @PutMapping
+  public ResponseEntity<Response<EventResponseDto>> updateEvent(
+          @RequestBody UpdateEventRequestDto updateEventRequestDto) {
+    return Response.successResponse("Update event success", eventService.updateEvent(updateEventRequestDto));
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Response<String>> deleteEvent(@PathVariable Long id) {
+    return Response.successResponse("Delete Event Success", eventService.deleteEvent(id));
   }
 }
