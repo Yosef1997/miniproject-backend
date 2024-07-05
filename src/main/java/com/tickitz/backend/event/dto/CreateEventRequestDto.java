@@ -2,8 +2,6 @@ package com.tickitz.backend.event.dto;
 
 import com.tickitz.backend.event.entity.Event;
 import com.tickitz.backend.promotion.dto.CreatePromoRequestDto;
-import com.tickitz.backend.promotion.entity.Promotion;
-import com.tickitz.backend.ticket.dao.TicketDao;
 import com.tickitz.backend.ticket.dto.CreateTicketRequestDto;
 import com.tickitz.backend.users.entity.Users;
 import lombok.Data;

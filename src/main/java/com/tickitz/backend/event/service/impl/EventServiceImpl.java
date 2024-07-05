@@ -32,8 +32,8 @@ public class EventServiceImpl implements EventService {
   private final TicketService ticketService;
   private final PromotionService promotionService;
 
-  public EventServiceImpl(EventRepository eventRepository, UsersService usersService, @Lazy ReviewService reviewService,
-                          TicketService ticketService, PromotionService promotionService
+  public EventServiceImpl(EventRepository eventRepository,  UsersService usersService, @Lazy ReviewService reviewService,
+                          @Lazy TicketService ticketService, @Lazy PromotionService promotionService
   ) {
     this.eventRepository = eventRepository;
     this.usersService = usersService;

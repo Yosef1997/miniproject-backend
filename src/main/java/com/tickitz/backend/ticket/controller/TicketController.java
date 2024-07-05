@@ -1,7 +1,6 @@
 package com.tickitz.backend.ticket.controller;
 
 import com.tickitz.backend.response.Response;
-import com.tickitz.backend.ticket.dao.TicketDao;
 import com.tickitz.backend.ticket.dto.CreateTicketRequestDto;
 import com.tickitz.backend.ticket.dto.TicketResponseDto;
 import com.tickitz.backend.ticket.dto.UpdateTicketRequestDto;
@@ -25,7 +24,7 @@ public class TicketController {
   }
 
   @GetMapping
-  public ResponseEntity<Response<List<TicketDao>>> getAllTicket(@RequestParam(name = "eventId", required = false) Long eventId){
+  public ResponseEntity<Response<List<TicketResponseDto>>> getAllTicket(@RequestParam(name = "eventId", required = false) Long eventId){
     return Response.successResponse("All Tickets Fetched", ticketService.getAllTickets(eventId));
   }
 
