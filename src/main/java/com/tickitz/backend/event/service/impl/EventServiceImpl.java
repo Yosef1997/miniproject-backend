@@ -5,6 +5,7 @@ import com.tickitz.backend.event.dto.EventResponseDto;
 import com.tickitz.backend.event.dto.UpdateEventRequestDto;
 import com.tickitz.backend.event.entity.Event;
 import com.tickitz.backend.event.repository.EventRepository;
+import com.tickitz.backend.event.repository.EventSpecifications;
 import com.tickitz.backend.event.service.EventService;
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
 import com.tickitz.backend.promotion.dto.CreatePromoRequestDto;
@@ -16,6 +17,9 @@ import com.tickitz.backend.ticket.service.TicketService;
 import com.tickitz.backend.users.entity.Users;
 import com.tickitz.backend.users.repository.UsersRepository;
 import lombok.extern.java.Log;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -37,9 +41,18 @@ public class EventServiceImpl implements EventService {
     this.promotionService = promotionService;
   }
 
+//  @Override
+//  public List<Event> getAllEvents() {
+//    return eventRepository.findAll();
+//  }
+
   @Override
-  public List<Event> getAllEvents() {
-    return eventRepository.findAll();
+  public Page<Event> getAllEvents(Pageable pageable, String eventName, String location, String category) {
+    Specification<Event> specification = Specification.where(EventSpecifications.byEventName(eventName))
+            .and(EventSpecifications.byLocation(location))
+            .and(EventSpecifications.byCategory(category));
+    return eventRepository.findAll(specification, pageable);
+
   }
 
   @Override
