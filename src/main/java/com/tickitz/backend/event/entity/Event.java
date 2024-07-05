@@ -76,15 +76,15 @@ public class Event {
 
   @JsonIgnore
   @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Ticket> tickets = new ArrayList<>();
+  private List<Ticket> tickets;
 
   @JsonIgnore
   @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Promotion> promotions = new ArrayList<>();
+  private List<Promotion> promotions;
 
   @JsonIgnore
   @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Review> reviews = new ArrayList<>();
+  private List<Review> reviews;
 
   @NotNull
   @ColumnDefault("CURRENT_TIMESTAMP")
