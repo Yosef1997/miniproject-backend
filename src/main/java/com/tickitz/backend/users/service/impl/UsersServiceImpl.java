@@ -2,7 +2,7 @@ package com.tickitz.backend.users.service.impl;
 
 import com.tickitz.backend.auth.helpers.Claims;
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
-import com.tickitz.backend.point.dto.PointRequestDto;
+import com.tickitz.backend.point.dto.CreatePointRequestDto;
 import com.tickitz.backend.point.service.PointService;
 import com.tickitz.backend.referral.dto.CreateReferralRequestDto;
 import com.tickitz.backend.referral.dto.ReferralResponseDto;
@@ -76,10 +76,10 @@ public class UsersServiceImpl implements UsersService {
         referral.setStatus(savedReferral.getStatus());
         referral.setUserId(savedReferral.getUserId());
 
-        PointRequestDto pointRequestDto = new PointRequestDto();
-        pointRequestDto.setId(referrer.get().getId());
-        pointRequestDto.setPoint(10000L);
-        pointService.createPoints(pointRequestDto);
+        CreatePointRequestDto createPointRequestDto = new CreatePointRequestDto();
+        createPointRequestDto.setUserId(referrer.get().getId());
+        createPointRequestDto.setPoint(10000L);
+        pointService.createPoints(createPointRequestDto);
       }
     }
 

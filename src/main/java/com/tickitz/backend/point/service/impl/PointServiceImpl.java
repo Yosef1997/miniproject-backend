@@ -1,8 +1,7 @@
 package com.tickitz.backend.point.service.impl;
 
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
-import com.tickitz.backend.point.dao.ResponsePointDao;
-import com.tickitz.backend.point.dto.PointRequestDto;
+import com.tickitz.backend.point.dto.CreatePointRequestDto;
 import com.tickitz.backend.point.dto.PointResponseDto;
 import com.tickitz.backend.point.entity.Point;
 import com.tickitz.backend.point.repository.PointRepository;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Log
@@ -29,32 +29,29 @@ public class PointServiceImpl implements PointService {
 
 
   @Override
-  public List<ResponsePointDao> getAllPoints() {
-   return   pointRepository.findAllWithUser();
+  public List<PointResponseDto> getAllPoints() {
+   List<Point> result = pointRepository.findAll();
+    return result.stream().map(this::mapToPointResponseDto).collect(Collectors.toList());
   }
 
   @Override
-  public PointResponseDto createPoints(PointRequestDto requestDto) {
-    Users user = usersRepository.findById(requestDto.getId()).orElseThrow(()-> new ApplicationException("User not exists"));
-    Point point = new Point();
-    point.setPoint(requestDto.getPoint());
-    point.setUser(user);
-
-    pointRepository.save(point);
-
-    PointResponseDto responseDto = new PointResponseDto();
-
-    responseDto.setId(pointRepository.save(point).getId());
-    responseDto.setPoint(point.getPoint());
-    responseDto.setUserId(point.getUser().getId());
-
-    return responseDto;
+  public PointResponseDto createPoints(CreatePointRequestDto createPointRequestDto) {
+    Users user = usersRepository.findById(createPointRequestDto.getUserId()).orElseThrow(()-> new ApplicationException("User not exists"));
+    Point saved = pointRepository.save(createPointRequestDto.toEntity(user));
+    return mapToPointResponseDto(saved);
   }
 
   @Override
   public Long getPointUser(Long id) {
     Instant expiredDay = Instant.now().minus(90, ChronoUnit.DAYS);
-    log.info(expiredDay.toString());
     return pointRepository.getUserTotalPoints(id, expiredDay);
+  }
+
+  public PointResponseDto mapToPointResponseDto(Point point) {
+    PointResponseDto response = new PointResponseDto();
+    response.setId(point.getId());
+    response.setPoint(point.getPoint());
+    response.setUserId(point.getUser().getId());
+    return response;
   }
 }

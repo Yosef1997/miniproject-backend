@@ -1,7 +1,6 @@
 package com.tickitz.backend.point.controller;
 
-import com.tickitz.backend.point.dao.ResponsePointDao;
-import com.tickitz.backend.point.dto.PointRequestDto;
+import com.tickitz.backend.point.dto.CreatePointRequestDto;
 import com.tickitz.backend.point.dto.PointResponseDto;
 import com.tickitz.backend.point.service.PointService;
 import com.tickitz.backend.response.Response;
@@ -11,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/point")
@@ -24,13 +24,13 @@ public class PointController {
   }
 
   @GetMapping
-  public ResponseEntity<Response<List<ResponsePointDao>>> getAllPoints() {
+  public ResponseEntity<Response<List<PointResponseDto>>> getAllPoints() {
     return Response.successResponse("Points data fetched", pointService.getAllPoints());
   }
 
   @PostMapping
-  public ResponseEntity<Response<PointResponseDto>> createPoint(@RequestBody PointRequestDto requestDto) {
-    return Response.successResponse("Add Point success to user id " + requestDto.getId(), pointService.createPoints(requestDto));
+  public ResponseEntity<Response<PointResponseDto>> createPoint(@RequestBody CreatePointRequestDto createPointRequestDto) {
+    return Response.successResponse("Add Point success to user id " + createPointRequestDto.getUserId(), pointService.createPoints(createPointRequestDto));
   }
 
   @GetMapping("/{id}")
