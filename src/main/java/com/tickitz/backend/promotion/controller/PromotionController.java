@@ -1,6 +1,5 @@
 package com.tickitz.backend.promotion.controller;
 
-import com.tickitz.backend.promotion.dao.PromotionDao;
 import com.tickitz.backend.promotion.dto.CreatePromoRequestDto;
 import com.tickitz.backend.promotion.dto.PromoResponseDto;
 import com.tickitz.backend.promotion.dto.UpdatePromoRequestDto;
@@ -12,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/promotion")
@@ -26,7 +26,7 @@ public class PromotionController {
 
 
   @GetMapping
-  public ResponseEntity<Response<List<PromotionDao>>> getAllPromotion(@RequestParam(name = "eventId",required = false) Long eventId){
+  public ResponseEntity<Response<List<PromoResponseDto>>> getAllPromotion(@RequestParam(name = "eventId",required = false) Long eventId){
     return Response.successResponse("All Promotions Fetched", promotionService.getAllPromotions(eventId));
   }
 

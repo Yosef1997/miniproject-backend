@@ -1,8 +1,7 @@
 package com.tickitz.backend.promotion.dto;
 
 import com.tickitz.backend.event.entity.Event;
-import com.tickitz.backend.event.repository.EventRepository;
-import com.tickitz.backend.exceptions.applicationException.ApplicationException;
+import com.tickitz.backend.event.service.EventService;
 import com.tickitz.backend.promotion.entity.Promotion;
 import com.tickitz.backend.types.PromotionTypeEnum;
 import lombok.Data;
@@ -18,8 +17,8 @@ public class CreatePromoRequestDto {
   private Instant expiredDate;
   private Long eventId;
 
-  public Promotion toEntity(EventRepository eventRepository) {
-    Event event = eventRepository.findById(eventId).orElseThrow(()->new ApplicationException("Event not exists"));
+  public Promotion toEntity(EventService eventService) {
+    Event event = eventService.getDetail(eventId);
     Promotion newPromo = new Promotion();
     newPromo.setName(name);
     newPromo.setType(type);

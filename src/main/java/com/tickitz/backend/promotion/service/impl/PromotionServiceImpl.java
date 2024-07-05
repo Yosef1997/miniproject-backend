@@ -1,8 +1,8 @@
 package com.tickitz.backend.promotion.service.impl;
 
-import com.tickitz.backend.event.repository.EventRepository;
+
+import com.tickitz.backend.event.service.EventService;
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
-import com.tickitz.backend.promotion.dao.PromotionDao;
 import com.tickitz.backend.promotion.dto.CreatePromoRequestDto;
 import com.tickitz.backend.promotion.dto.PromoResponseDto;
 import com.tickitz.backend.promotion.dto.UpdatePromoRequestDto;
@@ -13,76 +13,64 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Log
 public class PromotionServiceImpl implements PromotionService {
   private final PromotionRepository promotionRepository;
-  private final EventRepository eventRepository;
+  private final EventService eventService;
 
-  public PromotionServiceImpl(PromotionRepository promotionRepository, EventRepository eventRepository) {
+  public PromotionServiceImpl(PromotionRepository promotionRepository, EventService eventService) {
     this.promotionRepository = promotionRepository;
-    this.eventRepository = eventRepository;
+    this.eventService = eventService;
   }
 
   @Override
-  public List<PromotionDao> getAllPromotions(Long eventId) {
-    if (eventId != null) {
-      return promotionRepository.findAllPromotionByEventId(eventId);
+  public List<PromoResponseDto> getAllPromotions(Long eventId) {
+    if (eventId == null) {
+      List<Promotion> result = promotionRepository.findAll();
+      return result.stream().map(this::mapToPromoResponseDto).collect(Collectors.toList());
     }
-    return promotionRepository.findAllPromotion();
+    List<Promotion> result = promotionRepository.findAllByEventId(eventId);
+    return result.stream().map(this::mapToPromoResponseDto).collect(Collectors.toList());
   }
 
   @Override
   public PromoResponseDto getDetailPromotion(Long id) {
     Promotion detail = promotionRepository.findById(id).orElseThrow(()->new ApplicationException("Promotion not exists"));
-    PromoResponseDto response = new PromoResponseDto();
-    response.setId(detail.getId());
-    response.setName(detail.getName());
-    response.setType(detail.getType());
-    response.setUsageLimit(detail.getUsageLimit());
-    response.setExpiredDate(detail.getExpiredDate());
-    response.setEventId(detail.getEvent().getId());
-    return response;
+    return mapToPromoResponseDto(detail);
   }
 
   @Override
   public PromoResponseDto createPromotion(CreatePromoRequestDto createPromoRequestDto) {
-    Promotion newPromotion = promotionRepository.save(createPromoRequestDto.toEntity(eventRepository));
-    PromoResponseDto response = new PromoResponseDto();
-    response.setId(newPromotion.getId());
-    response.setName(newPromotion.getName());
-    response.setType(newPromotion.getType());
-    response.setUsageLimit(newPromotion.getUsageLimit());
-    response.setDiscount(newPromotion.getDiscount());
-    response.setExpiredDate(newPromotion.getExpiredDate());
-    response.setEventId(newPromotion.getEvent().getId());
-    return response;
+    Promotion newPromotion = promotionRepository.save(createPromoRequestDto.toEntity(eventService));
+    return mapToPromoResponseDto(newPromotion);
   }
 
   @Override
   public PromoResponseDto updatePromotion(UpdatePromoRequestDto updatePromoRequestDto) {
     Promotion promotion = promotionRepository.findById(updatePromoRequestDto.getId()).orElseThrow(() -> new ApplicationException("Promotion not exists"));
-    promotion.setName(promotion.getName());
-    promotion.setUsageLimit(promotion.getUsageLimit());
-    promotion.setDiscount(promotion.getDiscount());
-    promotion.setExpiredDate(promotion.getExpiredDate());
-    Promotion updated = promotionRepository.save(promotion);
-
-    PromoResponseDto response = new PromoResponseDto();
-    response.setEventId(updated.getId());
-    response.setName(updated.getName());
-    response.setType(updated.getType());
-    response.setUsageLimit(updated.getUsageLimit());
-    response.setExpiredDate(updated.getExpiredDate());
-    response.setEventId(updated.getEvent().getId());
-    return response;
+    Promotion updated = promotionRepository.save(updatePromoRequestDto.toEntity(promotion));
+    return mapToPromoResponseDto(updated);
   }
 
   @Override
   public String deletePromotion(Long id) {
+    getDetailPromotion(id);
     promotionRepository.deleteById(id);
     return "Delete Promotion Success";
+  }
+
+  public PromoResponseDto mapToPromoResponseDto(Promotion promo) {
+    PromoResponseDto response = new PromoResponseDto();
+    response.setId(promo.getId());
+    response.setName(promo.getName());
+    response.setType(promo.getType());
+    response.setUsageLimit(promo.getUsageLimit());
+    response.setDiscount(promo.getDiscount());
+    response.setExpiredDate(promo.getExpiredDate());
+    response.setEventId(promo.getEvent().getId());
+    return response;
   }
 }

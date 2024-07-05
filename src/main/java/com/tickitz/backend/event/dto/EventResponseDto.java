@@ -1,9 +1,8 @@
 package com.tickitz.backend.event.dto;
 
-import com.tickitz.backend.promotion.dao.PromotionDao;
+import com.tickitz.backend.promotion.dto.PromoResponseDto;
 import com.tickitz.backend.review.dto.ReviewResponseDto;
 import com.tickitz.backend.ticket.dto.TicketResponseDto;
-import com.tickitz.backend.ticket.entity.Ticket;
 import lombok.Data;
 
 import java.time.Instant;
@@ -24,5 +23,5 @@ public class EventResponseDto {
   private Long userId;
   private List<ReviewResponseDto> reviews;
   private List<TicketResponseDto> tickets;
-  private List<PromotionDao> promotions;
+  private List<PromoResponseDto> promotions;
 }
