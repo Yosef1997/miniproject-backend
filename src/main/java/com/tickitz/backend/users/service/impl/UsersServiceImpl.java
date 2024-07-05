@@ -1,6 +1,5 @@
 package com.tickitz.backend.users.service.impl;
 
-import com.tickitz.backend.auth.dto.ResetPasswordRequestDto;
 import com.tickitz.backend.auth.helpers.Claims;
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
 import com.tickitz.backend.point.dto.PointRequestDto;
@@ -148,21 +147,21 @@ public class UsersServiceImpl implements UsersService {
   @Override
   public ResponseUserDto getDetailUser(String email) {
     ResponseUserDto response = new ResponseUserDto();
-    Optional<Users> user = usersRepository.findByEmail(email);
-    log.info("GetDetailUser >>>>" + user.toString());
-    if (user.isPresent()) {
-      response.setId(user.get().getId());
-      response.setUsername(user.get().getUsername());
-      response.setAvatar(user.get().getAvatar());
-      response.setEmail(user.get().getEmail());
-      response.setRole(user.get().getRole().name());
-      response.setReferralCode(user.get().getReferralCode());
-      response.setPoint(pointService.getPointUser(user.get().getId()));
-      response.setReferralVoucher(referralService.getReferralUser(user.get().getId()));
-      return response;
-    }
-    return null;
+    Users user = usersRepository.findByEmail(email).orElseThrow(() -> new ApplicationException("User not exists"));
+
+    response.setId(user.getId());
+    response.setUsername(user.getUsername());
+    response.setAvatar(user.getAvatar());
+    response.setEmail(user.getEmail());
+    response.setRole(user.getRole().name());
+    response.setReferralCode(user.getReferralCode());
+    response.setPoint(pointService.getPointUser(user.getId()));
+    response.setReferralVoucher(referralService.getReferralUser(user.getId()));
+    return response;
   }
 
-
+  @Override
+  public Users getDetailUserId(Long id) {
+    return usersRepository.findById(id).orElseThrow(() -> new ApplicationException("User not exists"));
+  }
 }

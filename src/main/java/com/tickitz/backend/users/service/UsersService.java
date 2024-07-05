@@ -5,6 +5,7 @@ import com.tickitz.backend.users.dto.RegisterRequestDto;
 import com.tickitz.backend.users.dto.ResponseUserDto;
 import com.tickitz.backend.users.dto.UpdateUserRequestDto;
 import com.tickitz.backend.users.dto.UpdateUserResponseDto;
+import com.tickitz.backend.users.entity.Users;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ public interface UsersService {
   ResponseUserDto getProfile();
   UpdateUserResponseDto updateUser(UpdateUserRequestDto updateUserRequestDto);
   ResponseUserDto getDetailUser(String email);
+  Users getDetailUserId(Long id);
 }

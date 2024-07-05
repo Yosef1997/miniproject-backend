@@ -41,11 +41,6 @@ public class EventServiceImpl implements EventService {
     this.promotionService = promotionService;
   }
 
-//  @Override
-//  public List<Event> getAllEvents() {
-//    return eventRepository.findAll();
-//  }
-
   @Override
   public Page<Event> getAllEvents(Pageable pageable, String eventName, String location, String category) {
     Specification<Event> specification = Specification.where(EventSpecifications.byEventName(eventName))
@@ -73,6 +68,11 @@ public class EventServiceImpl implements EventService {
     response.setTickets(ticketService.getAllTickets(detail.getId()));
     response.setPromotions(promotionService.getAllPromotions(detail.getId()));
     return response;
+  }
+
+  @Override
+  public Event getDetail(Long id) {
+    return eventRepository.findById(id).orElseThrow(()->new ApplicationException("Event not exists"));
   }
 
   @Override
@@ -184,4 +184,6 @@ public class EventServiceImpl implements EventService {
     eventRepository.deleteById(eventId);
     return "Delete event success";
   }
+
+
 }
