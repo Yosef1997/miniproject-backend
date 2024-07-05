@@ -4,7 +4,7 @@ import com.tickitz.backend.auth.helpers.Claims;
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
 import com.tickitz.backend.point.dto.PointRequestDto;
 import com.tickitz.backend.point.service.PointService;
-import com.tickitz.backend.referral.dto.ReferralRequestDto;
+import com.tickitz.backend.referral.dto.CreateReferralRequestDto;
 import com.tickitz.backend.referral.dto.ReferralResponseDto;
 import com.tickitz.backend.referral.service.ReferralService;
 import com.tickitz.backend.users.dao.ResponseUserDao;
@@ -16,6 +16,7 @@ import com.tickitz.backend.users.entity.Users;
 import com.tickitz.backend.users.repository.UsersRepository;
 import com.tickitz.backend.users.service.UsersService;
 import lombok.extern.java.Log;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,8 @@ public class UsersServiceImpl implements UsersService {
   private final PointService pointService;
   private final ReferralService referralService;
 
-  public UsersServiceImpl(UsersRepository usersRepository, PasswordEncoder passwordEncoder, PointService pointService, ReferralService referralService) {
+  public UsersServiceImpl(UsersRepository usersRepository, PasswordEncoder passwordEncoder, PointService pointService,
+                          @Lazy ReferralService referralService) {
     this.usersRepository = usersRepository;
     this.passwordEncoder = passwordEncoder;
     this.pointService = pointService;
@@ -64,10 +66,10 @@ public class UsersServiceImpl implements UsersService {
     if (requestRegister.getRole() == Users.Role.CUSTOMER && !Objects.equals(requestRegister.getReferral(), "")) {
       Optional<Users> referrer = usersRepository.findByReferralCode(requestRegister.getReferral());
       if (referrer.isPresent()) {
-        ReferralRequestDto referralRequestDto = new ReferralRequestDto();
-        referralRequestDto.setId(savedUser.getId());
-        referralRequestDto.setReferralCode(requestRegister.getReferral());
-        var savedReferral = referralService.createReferral(referralRequestDto);
+        CreateReferralRequestDto createReferralRequestDto = new CreateReferralRequestDto();
+        createReferralRequestDto.setUserId(savedUser.getId());
+        createReferralRequestDto.setVoucherName(requestRegister.getReferral());
+        var savedReferral = referralService.createReferral(createReferralRequestDto);
         referral.setId(savedReferral.getId());
         referral.setVoucherName(savedReferral.getVoucherName());
         referral.setDiscountPercentage(savedReferral.getDiscountPercentage());

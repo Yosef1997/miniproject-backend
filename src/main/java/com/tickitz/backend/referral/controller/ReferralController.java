@@ -1,9 +1,8 @@
 package com.tickitz.backend.referral.controller;
 
-import com.tickitz.backend.referral.dao.ResponseReferralDao;
-import com.tickitz.backend.referral.dto.ReferralRequestDto;
+import com.tickitz.backend.referral.dto.CreateReferralRequestDto;
 import com.tickitz.backend.referral.dto.ReferralResponseDto;
-import com.tickitz.backend.referral.dto.UpdateRequestDto;
+import com.tickitz.backend.referral.dto.UpdateReferralRequestDto;
 import com.tickitz.backend.referral.service.ReferralService;
 import com.tickitz.backend.response.Response;
 import lombok.extern.java.Log;
@@ -25,22 +24,27 @@ public class ReferralController {
   }
 
   @GetMapping
-  public ResponseEntity<Response<List<ResponseReferralDao>>> getAllReferral() {
+  public ResponseEntity<Response<List<ReferralResponseDto>>> getAllReferral() {
     return Response.successResponse("All Referral fetched", referralService.getAllReferral());
   }
 
   @PostMapping
-  public ResponseEntity<Response<ReferralResponseDto>> createReferral(@RequestBody ReferralRequestDto referralRequestDto) {
-    return Response.successResponse("Add Referral success to user id " + referralRequestDto.getId(), referralService.createReferral(referralRequestDto));
+  public ResponseEntity<Response<ReferralResponseDto>> createReferral(@RequestBody CreateReferralRequestDto createReferralRequestDto) {
+    return Response.successResponse("Add Referral success to user id " + createReferralRequestDto.getUserId(), referralService.createReferral(createReferralRequestDto));
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/user/{id}")
   public ResponseEntity<Response<Object>> getUserReferral(@PathVariable Long id) {
     return Response.successResponse("Referral user with id " + id, referralService.getReferralUser(id));
   }
 
   @PutMapping
-  public ResponseEntity<Response<String>> updateReferral(@RequestBody UpdateRequestDto requestDto) {
+  public ResponseEntity<Response<ReferralResponseDto>> updateReferral(@RequestBody UpdateReferralRequestDto requestDto) {
     return Response.successResponse("Update referral success", referralService.updateReferral(requestDto));
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Response<Object>> deleteReferral(@PathVariable Long id) {
+    return Response.successResponse(referralService.deleteReferral(id));
   }
 }
