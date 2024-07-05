@@ -24,19 +24,4 @@ public class CreateReviewRequestDto {
     newReview.setEvent(eventService.getDetail(eventId));
     return newReview;
   }
-
-  public ReviewResponseDto mapToReviewResponseDto(Review newReview) {
-    ReviewResponseDto response = new ReviewResponseDto();
-    response.setId(newReview.getId());
-    response.setExperience(newReview.getExperience());
-    response.setQuality(newReview.getQuality());
-    response.setImprovement(newReview.getImprovement());
-    response.setRating(newReview.getRating());
-    response.setUserId(newReview.getUser().getId());
-    response.setEventId(newReview.getEvent().getId());
-    response.setCreatedAt(newReview.getCreatedAt());
-    response.setUpdatedAt(newReview.getUpdatedAt());
-    response.setDeletedAt(newReview.getDeletedAt());
-    return response;
-  }
 }

@@ -1,11 +1,9 @@
 package com.tickitz.backend.review.controller;
 
 import com.tickitz.backend.response.Response;
-import com.tickitz.backend.review.dao.ReviewDao;
 import com.tickitz.backend.review.dto.CreateReviewRequestDto;
 import com.tickitz.backend.review.dto.ReviewResponseDto;
 import com.tickitz.backend.review.dto.UpdateReviewRequestDto;
-import com.tickitz.backend.review.entity.Review;
 import com.tickitz.backend.review.service.ReviewService;
 import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +24,7 @@ public class ReviewController {
   }
 
   @GetMapping
-  public ResponseEntity<Response<List<ReviewDao>>> getAllReviews(@RequestParam(name = "eventId", required = false) Long eventId) {
+  public ResponseEntity<Response<List<ReviewResponseDto>>> getAllReviews(@RequestParam(name = "eventId", required = false) Long eventId) {
     return Response.successResponse("All Review Fetched", reviewService.getAllReview(eventId));
   }
 

@@ -1,5 +1,6 @@
 package com.tickitz.backend.review.dto;
 
+import com.tickitz.backend.users.entity.Users;
 import lombok.Data;
 
 import java.time.Instant;
@@ -11,7 +12,7 @@ public class ReviewResponseDto {
   private String quality;
   private String improvement;
   private Double rating;
-  private Long userId;
+  private Users user;
   private Long eventId;
   private Instant createdAt;
   private Instant updatedAt;

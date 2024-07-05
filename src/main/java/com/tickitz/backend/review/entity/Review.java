@@ -40,13 +40,12 @@ public class Review {
   @Column(nullable = false)
   private Double rating;
 
-  @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id", nullable = false)
   private Users user;
 
   @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "event_id", nullable = false)
   private Event event;
 
