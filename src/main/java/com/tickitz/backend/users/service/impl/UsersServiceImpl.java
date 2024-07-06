@@ -5,7 +5,6 @@ import com.tickitz.backend.exceptions.applicationException.ApplicationException;
 import com.tickitz.backend.point.dto.CreatePointRequestDto;
 import com.tickitz.backend.point.service.PointService;
 import com.tickitz.backend.referral.dto.CreateReferralRequestDto;
-import com.tickitz.backend.referral.dto.ReferralResponseDto;
 import com.tickitz.backend.referral.service.ReferralService;
 import com.tickitz.backend.users.dto.RegisterRequestDto;
 import com.tickitz.backend.users.dto.ResponseUserDto;

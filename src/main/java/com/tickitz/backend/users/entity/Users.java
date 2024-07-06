@@ -3,7 +3,6 @@ package com.tickitz.backend.users.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tickitz.backend.event.entity.Event;
 import com.tickitz.backend.point.entity.Point;
-import com.tickitz.backend.promotion.entity.Promotion;
 import com.tickitz.backend.referral.entity.Referral;
 import com.tickitz.backend.review.entity.Review;
 import jakarta.persistence.*;
@@ -15,8 +14,6 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Entity

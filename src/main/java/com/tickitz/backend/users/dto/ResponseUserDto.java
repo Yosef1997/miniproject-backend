@@ -1,9 +1,5 @@
 package com.tickitz.backend.users.dto;
 
-import com.tickitz.backend.referral.dto.ReferralResponseDto;
-import com.tickitz.backend.users.entity.Users;
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 @Data
