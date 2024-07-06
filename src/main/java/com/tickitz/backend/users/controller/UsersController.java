@@ -1,12 +1,9 @@
 package com.tickitz.backend.users.controller;
 
 import com.tickitz.backend.response.Response;
-import com.tickitz.backend.users.dao.ResponseUserDao;
 import com.tickitz.backend.users.dto.RegisterRequestDto;
 import com.tickitz.backend.users.dto.ResponseUserDto;
 import com.tickitz.backend.users.dto.UpdateUserRequestDto;
-import com.tickitz.backend.users.dto.UpdateUserResponseDto;
-import com.tickitz.backend.users.entity.Users;
 import com.tickitz.backend.users.service.UsersService;
 import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +24,7 @@ public class UsersController {
   }
 
   @GetMapping()
-  public ResponseEntity<Response<List<ResponseUserDao>>> getAllUsers() {
+  public ResponseEntity<Response<List<ResponseUserDto>>> getAllUsers() {
     return Response.successResponse("All registered users", usersService.getAllUser());
   }
 
@@ -42,7 +39,7 @@ public class UsersController {
   }
 
   @PutMapping("/profile")
-  public ResponseEntity<Response<UpdateUserResponseDto>> updateUser(@RequestBody UpdateUserRequestDto updateUserRequestDto) {
+  public ResponseEntity<Response<ResponseUserDto>> updateUser(@RequestBody UpdateUserRequestDto updateUserRequestDto) {
     return Response.successResponse("Update User Success", usersService.updateUser(updateUserRequestDto));
   }
 

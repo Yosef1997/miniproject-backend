@@ -14,7 +14,6 @@ public class ResponseUserDto {
   private String email;
   private String role;
   private String referralCode;
-  @Min(value = 0)
   private Long point;
   private Object referralVoucher;
 }

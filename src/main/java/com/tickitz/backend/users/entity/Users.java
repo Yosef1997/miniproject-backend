@@ -53,8 +53,7 @@ public class Users {
   @Enumerated(EnumType.STRING)
   private Role role;
 
-  @NotNull
-  @Column(name="referral_code", nullable = false)
+  @Column(name="referral_code")
   private String referralCode;
 
   @JsonIgnore
