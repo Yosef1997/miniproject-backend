@@ -23,11 +23,6 @@ public class Referral {
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
 
-  @NotBlank(message = "Voucher name is required")
-  @NotNull
-  @Column(name = "voucher_name", nullable = false)
-  private String voucherName;
-
   @Min(value = 0)
   @Column(name = "discount_percentage", nullable = false)
   private Integer discountPercentage;

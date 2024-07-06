@@ -68,10 +68,10 @@ public class UsersServiceImpl implements UsersService {
       if (referrer.isPresent()) {
         CreateReferralRequestDto createReferralRequestDto = new CreateReferralRequestDto();
         createReferralRequestDto.setUserId(savedUser.getId());
-        createReferralRequestDto.setVoucherName(requestRegister.getReferral());
+
         var savedReferral = referralService.createReferral(createReferralRequestDto);
         referral.setId(savedReferral.getId());
-        referral.setVoucherName(savedReferral.getVoucherName());
+
         referral.setDiscountPercentage(savedReferral.getDiscountPercentage());
         referral.setStatus(savedReferral.getStatus());
         referral.setUserId(savedReferral.getUserId());

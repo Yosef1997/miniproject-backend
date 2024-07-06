@@ -36,7 +36,8 @@ public class ReferralServiceImpl implements ReferralService {
   @Override
   public ReferralResponseDto getReferralUser(Long id) {
     Instant expiredDay = Instant.now().minus(90, ChronoUnit.DAYS);
-    Referral referral = referralRepository.findByUserIdAndStatusTrueAndCreatedAtAfter(id, expiredDay).orElseThrow(() -> new ApplicationException("Referral not found"));
+    Referral referral = referralRepository.findByUserIdAndStatusTrueAndCreatedAtAfter(id, expiredDay).orElse(null);
+    if (referral == null) return null;
     return mapToReferralResponseDto(referral);
   }
 
@@ -69,7 +70,6 @@ public class ReferralServiceImpl implements ReferralService {
   public ReferralResponseDto mapToReferralResponseDto(Referral referral) {
     ReferralResponseDto response = new ReferralResponseDto();
     response.setId(referral.getId());
-    response.setVoucherName(referral.getVoucherName());
     response.setDiscountPercentage(referral.getDiscountPercentage());
     response.setUserId(referral.getUser().getId());
     response.setStatus(referral.getStatus());
