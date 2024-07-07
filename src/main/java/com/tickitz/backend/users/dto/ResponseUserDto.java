@@ -10,6 +10,7 @@ public class ResponseUserDto {
   private String email;
   private String role;
   private String referralCode;
+  private String phone;
   private Long point;
   private Object referralVoucher;
 }

@@ -9,11 +9,13 @@ public class UpdateUserRequestDto {
   private String email;
   private String password;
   private String avatar;
+  private String phone;
 
   public Users toEntity(Users user){
     user.setUsername(username);
     user.setEmail(email);
     user.setAvatar(avatar);
+    user.setPhone(phone);
     return user;
   }
 }

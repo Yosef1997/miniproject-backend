@@ -114,6 +114,7 @@ public class UsersServiceImpl implements UsersService {
     response.setEmail(user.getEmail());
     response.setRole(user.getRole().name());
     response.setReferralCode(user.getReferralCode());
+    response.setPhone(user.getPhone());
     response.setPoint(pointService.getPointUser(user.getId()));
     response.setReferralVoucher(referralService.getReferralUser(user.getId()));
     return response;

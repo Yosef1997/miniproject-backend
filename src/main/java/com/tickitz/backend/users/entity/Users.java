@@ -53,6 +53,10 @@ public class Users {
   @Column(name="referral_code")
   private String referralCode;
 
+  @Size(max = 12)
+  @Column(length = 12)
+  private String phone;
+
   @JsonIgnore
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Point> point;
