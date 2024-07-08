@@ -2,6 +2,7 @@ package com.tickitz.backend.promotion.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tickitz.backend.event.entity.Event;
+import com.tickitz.backend.order.entity.Order;
 import com.tickitz.backend.types.PromotionTypeEnum;
 import com.tickitz.backend.users.entity.Users;
 import jakarta.persistence.*;
@@ -49,6 +50,9 @@ public class Promotion {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "event_id", nullable = false)
   private Event event;
+
+  @ManyToMany(mappedBy = "promotions")
+  private List<Order> orders;
 
   @NotNull
   @ColumnDefault("CURRENT_TIMESTAMP")

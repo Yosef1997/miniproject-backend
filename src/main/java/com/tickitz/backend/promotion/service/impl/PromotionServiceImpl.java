@@ -37,6 +37,12 @@ public class PromotionServiceImpl implements PromotionService {
   }
 
   @Override
+  public List<PromoResponseDto> getAllPromoById(List<Long> promoIds) {
+    List<Promotion> result= promotionRepository.findAllById(promoIds);
+    return result.stream().map(this::mapToPromoResponseDto).collect(Collectors.toList());
+  }
+
+  @Override
   public PromoResponseDto getDetailPromotion(Long id) {
     Promotion detail = promotionRepository.findById(id).orElseThrow(()->new ApplicationException("Promotion not exists"));
     return mapToPromoResponseDto(detail);

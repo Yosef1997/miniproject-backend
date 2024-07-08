@@ -1,6 +1,5 @@
 package com.tickitz.backend.ticket.service.impl;
 
-import com.tickitz.backend.event.repository.EventRepository;
 import com.tickitz.backend.event.service.EventService;
 import com.tickitz.backend.exceptions.applicationException.ApplicationException;
 import com.tickitz.backend.ticket.dto.CreateTicketRequestDto;
@@ -10,7 +9,6 @@ import com.tickitz.backend.ticket.entity.Ticket;
 import com.tickitz.backend.ticket.repository.TicketRepository;
 import com.tickitz.backend.ticket.service.TicketService;
 import lombok.extern.java.Log;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,6 +39,11 @@ public class TicketServiceImpl implements TicketService {
   public TicketResponseDto getDetailTicket(Long id) {
     Ticket detail = ticketRepository.findById(id).orElseThrow(() -> new ApplicationException("Ticket not exists"));
     return mapToTicketResponseDto(detail);
+  }
+
+  @Override
+  public Ticket getDetail(Long id) {
+    return ticketRepository.findById(id).orElseThrow(() -> new ApplicationException("Ticket with id: " + id + " not exists"));
   }
 
 

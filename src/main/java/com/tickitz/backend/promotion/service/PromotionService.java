@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface PromotionService {
   List<PromoResponseDto> getAllPromotions(Long eventId);
+  List<PromoResponseDto> getAllPromoById(List<Long> promoIds);
   PromoResponseDto getDetailPromotion(Long id);
   PromoResponseDto createPromotion(CreatePromoRequestDto createPromoRequestDto);
   PromoResponseDto updatePromotion(UpdatePromoRequestDto updatePromoRequestDto);

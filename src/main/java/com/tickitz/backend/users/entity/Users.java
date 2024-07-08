@@ -2,6 +2,7 @@ package com.tickitz.backend.users.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tickitz.backend.event.entity.Event;
+import com.tickitz.backend.order.entity.Order;
 import com.tickitz.backend.point.entity.Point;
 import com.tickitz.backend.referral.entity.Referral;
 import com.tickitz.backend.review.entity.Review;
@@ -72,6 +73,14 @@ public class Users {
   @JsonIgnore
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Review> review;
+
+  @JsonIgnore
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Order> order;
+
+  @JsonIgnore
+  @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Order> organizer;
 
   @NotNull
   @ColumnDefault("CURRENT_TIMESTAMP")
