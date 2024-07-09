@@ -61,11 +61,6 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public List<Long> getOrderPromo(Long orderId) {
-    return orderRepository.findAllPromoIdByOrderId(orderId);
-  }
-
-  @Override
   public OrderResponseDto createOrder(CreateOrderRequestDto createOrderRequestDto) {
     Order data = createOrderRequestDto.toEntity();
     data.setUser(usersService.getDetailUserId(createOrderRequestDto.getUserId()));

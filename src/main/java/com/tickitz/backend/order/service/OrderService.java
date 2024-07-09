@@ -13,7 +13,6 @@ public interface OrderService {
 Page<OrderResponseDto> getAllOrders(Pageable pageable);
 OrderResponseDto getDetailOrder(Long id);
 Order getDetail(Long id);
-List<Long> getOrderPromo(Long orderId);
 OrderResponseDto createOrder(CreateOrderRequestDto createOrderRequestDto);
 OrderResponseDto updateOrder(UpdateOrderRequestDto updateOrderRequestDto);
 String deleteOrder(Long id);
