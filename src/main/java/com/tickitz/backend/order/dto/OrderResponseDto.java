@@ -2,6 +2,7 @@ package com.tickitz.backend.order.dto;
 
 import com.tickitz.backend.event.dto.EventResponseDto;
 import com.tickitz.backend.promotion.dto.PromoResponseDto;
+import com.tickitz.backend.promotion.entity.Promotion;
 import com.tickitz.backend.ticket.dto.TicketResponseDto;
 import com.tickitz.backend.ticketOrder.dto.TicketOrderResponseDto;
 import com.tickitz.backend.users.dto.ResponseUserDto;
@@ -18,5 +19,5 @@ public class OrderResponseDto {
   private ResponseUserDto organizer;
   private EventResponseDto event;
   private List<TicketOrderResponseDto> tickets;
-  private List<PromoResponseDto> promotions;
+  private List<Promotion> promotions;
 }

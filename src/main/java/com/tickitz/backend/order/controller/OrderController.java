@@ -6,11 +6,13 @@ import com.tickitz.backend.order.dto.UpdateOrderRequestDto;
 import com.tickitz.backend.order.service.OrderService;
 import com.tickitz.backend.response.Response;
 import lombok.extern.java.Log;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/order")
@@ -24,8 +26,9 @@ public class OrderController {
   }
 
   @GetMapping
-  public ResponseEntity<Response<List<OrderResponseDto>>> getAllOrders() {
-    return Response.successResponse("All Order Fetched", orderService.getAllOrders());
+  public ResponseEntity<Response<Page<OrderResponseDto>>> getAllOrders(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    Pageable pageable = PageRequest.of(page,size);
+    return Response.successResponse("All Order Fetched", orderService.getAllOrders(pageable));
   }
 
   @GetMapping("/{id}")

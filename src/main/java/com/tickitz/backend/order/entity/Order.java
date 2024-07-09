@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Fetch;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -36,17 +37,17 @@ public class Order {
   private Long usedPoint;
 
   @NotNull(message = "User id is required")
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
   private Users user;
 
   @NotNull(message = "Organizer id is required")
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "organizer_id", referencedColumnName = "id", nullable = false)
   private Users organizer;
 
   @NotNull(message = "Event id is required")
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "event_id", referencedColumnName = "id", nullable = false)
   private Event event;
 
@@ -55,7 +56,7 @@ public class Order {
   @Column(nullable = false)
   private List<TicketOrder> ticketOrders = new ArrayList<>();
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
           name = "order_promotion",
           joinColumns = @JoinColumn(name = "order_id"),

@@ -8,13 +8,14 @@ import com.tickitz.backend.order.dto.UpdateOrderRequestDto;
 import com.tickitz.backend.order.entity.Order;
 import com.tickitz.backend.order.repository.OrderRepository;
 import com.tickitz.backend.order.service.OrderService;
-import com.tickitz.backend.promotion.entity.Promotion;
 import com.tickitz.backend.promotion.service.PromotionService;
 import com.tickitz.backend.ticketOrder.dto.CreateTicketOrderRequestDto;
 import com.tickitz.backend.ticketOrder.service.TicketOrderService;
 import com.tickitz.backend.users.service.UsersService;
 import lombok.extern.java.Log;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,17 +44,15 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public List<OrderResponseDto> getAllOrders() {
-    List<Order> result = orderRepository.findAll();
-    return result.stream().map(this::mapToOrderResponseDto).collect(Collectors.toList());
+  public Page<OrderResponseDto> getAllOrders(Pageable pageable) {
+    return orderRepository.findAll(pageable).map(this::mapToOrderResponseDto);
   }
 
   @Override
   public OrderResponseDto getDetailOrder(Long id) {
     Order detail = orderRepository.findById(id).orElseThrow(() -> new ApplicationException("Order with id: " + id + " not exists"));
-    OrderResponseDto response = mapToOrderResponseDto(detail);
-    response.setPromotions(promotionService.getAllPromoById(getOrderPromo(id)));
-    return response;
+    return mapToOrderResponseDto(detail);
+
   }
 
   @Override
@@ -72,17 +71,15 @@ public class OrderServiceImpl implements OrderService {
     data.setUser(usersService.getDetailUserId(createOrderRequestDto.getUserId()));
     data.setOrganizer(usersService.getDetailUserId(createOrderRequestDto.getOrganizerId()));
     data.setEvent(eventService.getDetail(createOrderRequestDto.getEventId()));
-
+    data.setPromotions(promotionService.getAllPromoById(createOrderRequestDto.getPromoIds()));
     Order result = orderRepository.save(data);
 
     for (CreateTicketOrderRequestDto ticketOrder : createOrderRequestDto.getTickets()) {
       ticketOrder.setOrderId(result.getId());
       ticketOrderService.createTicketOrder(ticketOrder);
     }
-    OrderResponseDto response = mapToOrderResponseDto(result);
-    response.setPromotions(promotionService.getAllPromoById(createOrderRequestDto.getPromoIds()));
 
-    return response;
+    return mapToOrderResponseDto(result);
   }
 
   @Override
@@ -108,6 +105,7 @@ public class OrderServiceImpl implements OrderService {
     response.setOrganizer(usersService.getDetailUser(order.getOrganizer().getEmail()));
     response.setEvent(eventService.getDetailEvent(order.getEvent().getId()));
     response.setTickets(ticketOrderService.getAllTicketOrders(order.getId()));
+    response.setPromotions(order.getPromotions());
     return response;
   }
 }

@@ -47,10 +47,12 @@ public class Promotion {
   @Column(name = "expired_date", nullable = false)
   private Instant expiredDate;
 
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "event_id", nullable = false)
   private Event event;
 
+  @JsonIgnore
   @ManyToMany(mappedBy = "promotions")
   private List<Order> orders;
 
