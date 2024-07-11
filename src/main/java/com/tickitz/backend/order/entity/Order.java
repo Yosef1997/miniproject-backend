@@ -32,6 +32,10 @@ public class Order {
   @Column(name = "total_price", nullable = false)
   private Long totalPrice;
 
+  @Min(value = 1, message = "Minimum total ticket is one")
+  @Column(name = "total_ticket", nullable = false)
+  private Integer totalTicket;
+
   @Min(value = 0, message = "Total price must be non-negative")
   @Column(name = "used_point", nullable = false)
   private Long usedPoint;

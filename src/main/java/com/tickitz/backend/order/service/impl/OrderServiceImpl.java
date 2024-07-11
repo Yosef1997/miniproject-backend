@@ -9,6 +9,7 @@ import com.tickitz.backend.order.entity.Order;
 import com.tickitz.backend.order.repository.OrderRepository;
 import com.tickitz.backend.order.service.OrderService;
 import com.tickitz.backend.promotion.service.PromotionService;
+import com.tickitz.backend.sales.dao.*;
 import com.tickitz.backend.ticketOrder.dto.CreateTicketOrderRequestDto;
 import com.tickitz.backend.ticketOrder.service.TicketOrderService;
 import com.tickitz.backend.users.service.UsersService;
@@ -18,8 +19,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Log
@@ -91,10 +93,106 @@ public class OrderServiceImpl implements OrderService {
     return "Delete Order Success";
   }
 
+  @Override
+  public List<SalesDataDao> aggregateSalesDataHourly(Long eventId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    return orderRepository.findSalesData("hour", eventId,
+            startDateTime.atZone(ZoneId.systemDefault()).toInstant(),
+            endDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  @Override
+  public List<SalesDataDao> aggregateSalesDataDaily(Long eventId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    return orderRepository.findSalesData("day", eventId,
+            startDateTime.atZone(ZoneId.systemDefault()).toInstant(),
+            endDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  @Override
+  public List<SalesDataDao> aggregateSalesDataMonthly(Long eventId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    return orderRepository.findSalesData("month", eventId,
+            startDateTime.atZone(ZoneId.systemDefault()).toInstant(),
+            endDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  @Override
+  public List<SalesOrganizerDao> aggregateOrganizerSalesDataHourly(Long organizerId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    return orderRepository.findSalesOrganizer("hour", organizerId,
+            startDateTime.atZone(ZoneId.systemDefault()).toInstant(),
+            endDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  @Override
+  public List<SalesOrganizerDao> aggregateOrganizerSalesDataDaily(Long organizerId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    return orderRepository.findSalesOrganizer("day", organizerId,
+            startDateTime.atZone(ZoneId.systemDefault()).toInstant(),
+            endDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  @Override
+  public List<SalesOrganizerDao> aggregateOrganizerSalesDataMonthly(Long organizerId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    return orderRepository.findSalesOrganizer("month", organizerId,
+            startDateTime.atZone(ZoneId.systemDefault()).toInstant(),
+            endDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  @Override
+  public List<SalesTicketDao> aggregateSalesTicketHourly(Long eventId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    return orderRepository.findSalesTicket("hour", eventId,
+            startDateTime.atZone(ZoneId.systemDefault()).toInstant(),
+            endDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  @Override
+  public List<SalesTicketDao> aggregateSalesDTicketDaily(Long eventId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    return orderRepository.findSalesTicket("day", eventId,
+            startDateTime.atZone(ZoneId.systemDefault()).toInstant(),
+            endDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  @Override
+  public List<SalesTicketDao> aggregateSalesTicketMonthly(Long eventId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    return orderRepository.findSalesTicket("month", eventId,
+            startDateTime.atZone(ZoneId.systemDefault()).toInstant(),
+            endDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  @Override
+  public List<SalesTicketOrganizerDao> aggregateOrganizerSalesTicketHourly(Long organizerId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    return orderRepository.findSalesTicketOrganizer("hour", organizerId,
+            startDateTime.atZone(ZoneId.systemDefault()).toInstant(),
+            endDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  @Override
+  public List<SalesTicketOrganizerDao> aggregateOrganizerSalesTicketDaily(Long organizerId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    return orderRepository.findSalesTicketOrganizer("day", organizerId,
+            startDateTime.atZone(ZoneId.systemDefault()).toInstant(),
+            endDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  @Override
+  public List<SalesTicketOrganizerDao> aggregateOrganizerSalesTicketMonthly(Long organizerId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    return orderRepository.findSalesTicketOrganizer("month", organizerId,
+            startDateTime.atZone(ZoneId.systemDefault()).toInstant(),
+            endDateTime.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  @Override
+  public SalesTotalSalesTotalTicketEventDao getTotalSalesTotalTicketEvent(Long eventId) {
+    return orderRepository.findTotalSalesTotalTicketEvent(eventId);
+  }
+
+  @Override
+  public SalesTotalSalesTotalTicketOrganizerDao getTotalSalesTotalTicketOrganizer(Long organizerId) {
+    return orderRepository.findTotalSalesTotalTicketOrganizer(organizerId);
+  }
+
+
   public OrderResponseDto mapToOrderResponseDto(Order order) {
     OrderResponseDto response = new OrderResponseDto();
     response.setId(order.getId());
     response.setTotalPrice(order.getTotalPrice());
+    response.setTotalTicket(order.getTotalTicket());
     response.setUsedPoint(order.getUsedPoint());
     response.setUser(usersService.getDetailUser(order.getUser().getEmail()));
     response.setOrganizer(usersService.getDetailUser(order.getOrganizer().getEmail()));

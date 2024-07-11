@@ -14,6 +14,7 @@ import java.util.List;
 public class OrderResponseDto {
   private Long id;
   private Long totalPrice;
+  private Integer totalTicket;
   private Long usedPoint;
   private ResponseUserDto user;
   private ResponseUserDto organizer;

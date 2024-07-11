@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 public class CreateOrderRequestDto {
   private Long totalPrice;
+  private Integer totalTicket;
   private Long usedPoint;
   private Long userId;
   private Long organizerId;
@@ -20,6 +21,7 @@ public class CreateOrderRequestDto {
   public Order toEntity() {
     Order newOrder = new Order();
     newOrder.setTotalPrice(totalPrice);
+    newOrder.setTotalTicket(totalTicket);
     newOrder.setUsedPoint(usedPoint);
     return newOrder;
   }

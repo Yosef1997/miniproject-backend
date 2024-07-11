@@ -7,11 +7,13 @@ import lombok.Data;
 public class UpdateOrderRequestDto {
   private Long id;
   private Long totalPrice;
+  private Integer totalTicket;
   private Long usedPoint;
 
   public Order toEntity(Order order) {
     order.setId(id);
     order.setTotalPrice(totalPrice);
+    order.setTotalTicket(totalTicket);
     order.setUsedPoint(usedPoint);
     return order;
   }
