@@ -12,12 +12,15 @@ import com.tickitz.backend.users.entity.Users;
 import com.tickitz.backend.users.service.UsersService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -51,24 +54,32 @@ public class EventServiceTest {
     createEventRequestDto.setLocation("Jakarta");
     createEventRequestDto.setVenue("Gelora Bung Karno");
     createEventRequestDto.setDescription("description");
-    createEventRequestDto.setDate("2024-07-12");
+    createEventRequestDto.setDate("2024-07-12T00:00:00Z");
     createEventRequestDto.setStartTime("2024-07-01T18:00:00Z");
     createEventRequestDto.setEndTime("2024-07-01T21:00:00Z");
     createEventRequestDto.setUserId(2454L);
+    createEventRequestDto.setTickets(Collections.emptyList());
+    createEventRequestDto.setPromotions(Collections.emptyList());
 
 
 
-    updateEventRequestDto.setId(852L);
+    updateEventRequestDto.setId(952L);
     updateEventRequestDto.setEventName("Update Sample Event");
     updateEventRequestDto.setEventImage("https://res.cloudinary.com/dhbg53ncx/image/upload/v1719926382/j3igaspvfztc6zgbxd1t.jpg");
     updateEventRequestDto.setCategory("Music");
     updateEventRequestDto.setLocation("Jakarta");
     updateEventRequestDto.setVenue("Gelora Bung Karno");
     updateEventRequestDto.setDescription("description");
-    updateEventRequestDto.setDate("2024-07-12");
+    updateEventRequestDto.setDate("2024-07-12T00:00:00Z");
     updateEventRequestDto.setStartTime("2024-07-01T18:00:00Z");
     updateEventRequestDto.setEndTime("2024-07-01T21:00:00Z");
     updateEventRequestDto.setUserId(2454L);
+
+    Users activeUser = new Users();
+    activeUser.setId(2454L);
+
+    activeUser.setRole(Users.Role.ORGANIZER);
+    when(usersService.getDetailUserId(Mockito.anyLong())).thenReturn(activeUser);
   }
 
 
@@ -92,7 +103,6 @@ public class EventServiceTest {
   @Test
   void testCreateEvent() {
     EventResponseDto result = eventService.createEvent(createEventRequestDto);
-
     assertNotNull(result);
     assertEquals("Sample Event", result.getEventName());
   }
@@ -105,7 +115,7 @@ public class EventServiceTest {
 
   @Test
   void testDeleteEvent() {
-    String result = eventService.deleteEvent(953L);
+    String result = eventService.deleteEvent(1052L);
 
     assertEquals("Delete event success", result);
   }
