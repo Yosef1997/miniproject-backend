@@ -25,9 +25,17 @@ public class EventController {
   }
 
   @GetMapping
-  public ResponseEntity<Response<Page<EventResponseDto>>> getAllEvents(@RequestParam(required = false) String eventName, @RequestParam(required = false) String location, @RequestParam(required = false) String category, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+  public ResponseEntity<Response<Page<EventResponseDto>>> getAllEvents(
+          @RequestParam(required = false) String eventName,
+          @RequestParam(required = false) String location,
+          @RequestParam(required = false) String category,
+          @RequestParam(required = false) Long userId,
+          @RequestParam(required = false) String upcoming,
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "20") int size) {
     Pageable pageable = PageRequest.of(page, size);
-    return Response.successResponse("All events fetched", eventService.getAllEvents( pageable, eventName, location, category));
+    return Response.successResponse("All events fetched", eventService.getAllEvents(pageable,
+            eventName, location, category, userId, upcoming));
   }
 
   @GetMapping("/{id}")

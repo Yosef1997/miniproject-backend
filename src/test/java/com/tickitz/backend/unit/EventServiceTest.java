@@ -86,7 +86,7 @@ public class EventServiceTest {
   @Test
   void testGetAllEvents() {
     Pageable pageable = PageRequest.of(0, 10);
-    Page<EventResponseDto> result = eventService.getAllEvents(pageable, null, null, null);
+    Page<EventResponseDto> result = eventService.getAllEvents(pageable, null, null, null, null, null);
 
     assertNotNull(result);
     assertEquals(10, result.getSize());
