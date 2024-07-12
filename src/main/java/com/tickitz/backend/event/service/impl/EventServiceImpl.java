@@ -43,9 +43,9 @@ public class EventServiceImpl implements EventService {
   }
 
   @Override
-  public Page<Event> getAllEvents(Pageable pageable, String eventName, String location, String category) {
+  public Page<EventResponseDto> getAllEvents(Pageable pageable, String eventName, String location, String category) {
     Specification<Event> specification = Specification.where(EventSpecifications.byEventName(eventName)).and(EventSpecifications.byLocation(location)).and(EventSpecifications.byCategory(category));
-    return eventRepository.findAll(specification, pageable);
+    return eventRepository.findAll(specification, pageable).map(this::mapToEventResponseDto);
 
   }
 
