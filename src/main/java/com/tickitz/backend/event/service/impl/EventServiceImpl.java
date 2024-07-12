@@ -43,9 +43,9 @@ public class EventServiceImpl implements EventService {
   }
 
   @Override
-  public Page<Event> getAllEvents(Pageable pageable, String eventName, String location, String category) {
+  public Page<EventResponseDto> getAllEvents(Pageable pageable, String eventName, String location, String category) {
     Specification<Event> specification = Specification.where(EventSpecifications.byEventName(eventName)).and(EventSpecifications.byLocation(location)).and(EventSpecifications.byCategory(category));
-    return eventRepository.findAll(specification, pageable);
+    return eventRepository.findAll(specification, pageable).map(this::mapToEventAll);
 
   }
 
@@ -112,6 +112,23 @@ public class EventServiceImpl implements EventService {
     response.setReviews(reviewService.getAllReview(event.getId()));
     response.setTickets(ticketService.getAllTickets(event.getId()));
     response.setPromotions(promotionService.getAllPromotions(event.getId()));
+    return response;
+  }
+
+  public EventResponseDto mapToEventAll(Event event) {
+    EventResponseDto response = new EventResponseDto();
+    response.setId(event.getId());
+    response.setEventName(event.getEventName());
+    response.setEventImage(event.getEventImage());
+    response.setCategory(event.getCategory());
+    response.setLocation(event.getLocation());
+    response.setVenue(event.getVenue());
+    response.setDescription(event.getDescription());
+    response.setDate(event.getDate());
+    response.setStartTime(event.getStartTime());
+    response.setEndTime(event.getEndTime());
+    response.setUserId(event.getUser().getId());
+    response.setTickets(ticketService.getAllTickets(event.getId()));
     return response;
   }
 }

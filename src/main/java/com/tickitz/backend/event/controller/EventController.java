@@ -3,7 +3,6 @@ package com.tickitz.backend.event.controller;
 import com.tickitz.backend.event.dto.CreateEventRequestDto;
 import com.tickitz.backend.event.dto.EventResponseDto;
 import com.tickitz.backend.event.dto.UpdateEventRequestDto;
-import com.tickitz.backend.event.entity.Event;
 import com.tickitz.backend.event.service.EventService;
 import com.tickitz.backend.response.Response;
 import lombok.extern.java.Log;
@@ -13,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/event")
@@ -28,7 +25,7 @@ public class EventController {
   }
 
   @GetMapping
-  public ResponseEntity<Response<Page<Event>>> getAllEvents(@RequestParam(required = false) String eventName, @RequestParam(required = false) String location, @RequestParam(required = false) String category, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+  public ResponseEntity<Response<Page<EventResponseDto>>> getAllEvents(@RequestParam(required = false) String eventName, @RequestParam(required = false) String location, @RequestParam(required = false) String category, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
     Pageable pageable = PageRequest.of(page, size);
     return Response.successResponse("All events fetched", eventService.getAllEvents( pageable, eventName, location, category));
   }
