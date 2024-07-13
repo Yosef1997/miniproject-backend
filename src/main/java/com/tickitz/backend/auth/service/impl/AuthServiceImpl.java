@@ -28,11 +28,12 @@ public class AuthServiceImpl implements AuthService {
   private final PasswordEncoder passwordEncoder;
   private final UsersRepository usersRepository;
   private final AuthRedisRepository authRedisRepository;
-  public AuthServiceImpl (JwtEncoder jwtEncoder, PasswordEncoder passwordEncoder, UsersRepository usersRepository, AuthRedisRepository authRedisRepository) {
+
+  public AuthServiceImpl(JwtEncoder jwtEncoder, PasswordEncoder passwordEncoder, UsersRepository usersRepository, AuthRedisRepository authRedisRepository) {
     this.jwtEncoder = jwtEncoder;
     this.passwordEncoder = passwordEncoder;
     this.usersRepository = usersRepository;
-    this.authRedisRepository =authRedisRepository;
+    this.authRedisRepository = authRedisRepository;
   }
 
   @Override
@@ -42,9 +43,9 @@ public class AuthServiceImpl implements AuthService {
     String scope = authentication.getAuthorities()
             .stream()
             .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.joining(""));
+            .collect(Collectors.joining(" "));
 
-    var existingKey = authRedisRepository.getJwtKey(authentication.getName());
+        var existingKey = authRedisRepository.getJwtKey(authentication.getName());
     if (existingKey !=null) {
       log.info("Token already exists for user: " + authentication.getName()) ;
       return existingKey;

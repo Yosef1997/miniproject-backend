@@ -7,10 +7,12 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.tickitz.backend.auth.service.impl.UserDetailsServiceImpl;
+import com.tickitz.backend.users.entity.Users;
 import jakarta.servlet.http.Cookie;
 import lombok.extern.java.Log;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -26,8 +28,16 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -60,18 +70,25 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
     return http
             .csrf(AbstractHttpConfigurer::disable)
-            .cors(AbstractHttpConfigurer::disable)
+            .cors(Customizer.withDefaults())
             .authorizeHttpRequests(auth -> {
               auth.requestMatchers("/error/**").permitAll();
               auth.requestMatchers("/api/v1/auth/**").permitAll();
-              auth.requestMatchers("/api/v1/events/**").permitAll();
+              auth.requestMatchers(HttpMethod.GET,"/api/v1/event/**").permitAll();
+              auth.requestMatchers(HttpMethod.POST,"/api/v1/event/**").hasAuthority("SCOPE_ORGANIZER");
+              auth.requestMatchers(HttpMethod.PUT,"/api/v1/event/**").hasAuthority("SCOPE_ORGANIZER");
+              auth.requestMatchers(HttpMethod.DELETE,"/api/v1/event/**").hasAuthority("SCOPE_ORGANIZER");
               auth.requestMatchers("/api/v1/users").permitAll();
               auth.requestMatchers("/api/v1/users/register").permitAll();
+              auth.requestMatchers("/api/v1/order/**").hasAuthority("SCOPE_CUSTOMER");
+              auth.requestMatchers(HttpMethod.POST, "/api/v1/review/**").hasAuthority("SCOPE_CUSTOMER");
+              auth.requestMatchers("/api/v1/sales/**").hasAuthority("SCOPE_ORGANIZER");
               auth.anyRequest().authenticated();
             })
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .oauth2ResourceServer((oauth2) -> {
-                      oauth2.jwt((jwt) -> jwt.decoder(jwtDecoder()));
+                      oauth2.jwt((jwt) -> jwt
+                              .decoder(jwtDecoder() ));
                       oauth2.bearerTokenResolver(request -> {
                         Cookie[] cookies = request.getCookies();
                         if (cookies != null) {
@@ -99,5 +116,19 @@ public class SecurityConfig {
     JWK jwk = new RSAKey.Builder(rsaKeyConfigProperties.publicKey()).privateKey(rsaKeyConfigProperties.privateKey()).build();
     JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
     return new NimbusJwtEncoder(jwks);
+  }
+
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","https://miniproject-ecru.vercel.app/"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    configuration.setAllowedHeaders(Arrays.asList("*"));
+    configuration.setAllowCredentials(true);
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+
+    return source;
   }
 }

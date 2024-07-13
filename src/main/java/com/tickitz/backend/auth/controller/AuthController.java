@@ -45,6 +45,11 @@ public class AuthController {
     UserAuth userDetails = (UserAuth) authentication.getPrincipal();
     String token = authService.generateToken(authentication);
 
+    //Get logged-in user's role
+    userDetails.getAuthorities().forEach(authority -> {
+      log.info(authority.getAuthority());
+    });
+    log.info("Token requested for user :" + userDetails.getUsername() + " with roles: " + userDetails.getAuthorities().toArray()[0].toString());
     LoginResponseDto loginResponseDto = new LoginResponseDto();
     loginResponseDto.setMessage("User Logged in successfully");
     loginResponseDto.setToken(token);
