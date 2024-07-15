@@ -73,13 +73,14 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(auth -> {
               auth.requestMatchers("/error/**").permitAll();
+              auth.requestMatchers("/api/v1/home/**").permitAll();
               auth.requestMatchers("/api/v1/auth/**").permitAll();
               auth.requestMatchers(HttpMethod.GET,"/api/v1/event/**").permitAll();
+              auth.requestMatchers("/api/v1/users").permitAll();
+              auth.requestMatchers("/api/v1/users/register").permitAll();
               auth.requestMatchers(HttpMethod.POST,"/api/v1/event/**").hasAuthority("SCOPE_ORGANIZER");
               auth.requestMatchers(HttpMethod.PUT,"/api/v1/event/**").hasAuthority("SCOPE_ORGANIZER");
               auth.requestMatchers(HttpMethod.DELETE,"/api/v1/event/**").hasAuthority("SCOPE_ORGANIZER");
-              auth.requestMatchers("/api/v1/users").permitAll();
-              auth.requestMatchers("/api/v1/users/register").permitAll();
               auth.requestMatchers("/api/v1/order/**").hasAuthority("SCOPE_CUSTOMER");
               auth.requestMatchers(HttpMethod.POST, "/api/v1/review/**").hasAuthority("SCOPE_CUSTOMER");
               auth.requestMatchers("/api/v1/sales/**").hasAuthority("SCOPE_ORGANIZER");

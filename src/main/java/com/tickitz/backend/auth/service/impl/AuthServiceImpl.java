@@ -45,11 +45,11 @@ public class AuthServiceImpl implements AuthService {
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(" "));
 
-        var existingKey = authRedisRepository.getJwtKey(authentication.getName());
-    if (existingKey !=null) {
-      log.info("Token already exists for user: " + authentication.getName()) ;
-      return existingKey;
-    }
+//    var existingKey = authRedisRepository.getJwtKey(authentication.getName());
+//    if (existingKey != null) {
+//      log.info("Token already exists for user: " + authentication.getName());
+//      return existingKey;
+//    }
 
     JwtClaimsSet claims = JwtClaimsSet.builder()
             .issuer("self")
@@ -62,11 +62,11 @@ public class AuthServiceImpl implements AuthService {
 
     var jwt = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-    if (authRedisRepository.isKeyBlacklisted(jwt)) {
-      throw new ApplicationException("Token has been blacklisted");
-    }
-
-    authRedisRepository.saveJwtKey(authentication.getName(), jwt);
+//    if (authRedisRepository.isKeyBlacklisted(jwt)) {
+//      throw new ApplicationException("Token has been blacklisted");
+//    }
+//
+//    authRedisRepository.saveJwtKey(authentication.getName(), jwt);
     return jwt;
   }
 

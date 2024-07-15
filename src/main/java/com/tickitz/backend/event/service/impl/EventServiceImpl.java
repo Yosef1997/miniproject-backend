@@ -49,8 +49,8 @@ public class EventServiceImpl implements EventService {
             .and(EventSpecifications.byCategory(category))
             .and(EventSpecifications.byUserId(userId))
             .and(EventSpecifications.byUpcoming(upcoming));
-    return eventRepository.findAll(specification, pageable).map(this::mapToEventAll);
 
+    return eventRepository.findAll(specification, pageable).map(this::mapToEventAll);
   }
 
   @Override
@@ -136,3 +136,4 @@ public class EventServiceImpl implements EventService {
     return response;
   }
 }
+
