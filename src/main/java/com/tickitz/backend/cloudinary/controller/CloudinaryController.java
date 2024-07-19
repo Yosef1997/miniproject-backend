@@ -19,7 +19,7 @@ public class CloudinaryController {
     this.cloudinaryService = cloudinaryService;
   }
 
-  @PostMapping("/")
+  @PostMapping()
   public ResponseEntity<Response<Object>> handleImageUpload(@RequestParam("file") MultipartFile file) {
     try {
       Object imageUrl = cloudinaryService.uploadImage(file);

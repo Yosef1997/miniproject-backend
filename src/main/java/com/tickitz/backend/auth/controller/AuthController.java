@@ -51,6 +51,7 @@ public class AuthController {
     });
     log.info("Token requested for user :" + userDetails.getUsername() + " with roles: " + userDetails.getAuthorities().toArray()[0].toString());
     LoginResponseDto loginResponseDto = new LoginResponseDto();
+    loginResponseDto.setUser(userDetails.getUser());
     loginResponseDto.setMessage("User Logged in successfully");
     loginResponseDto.setToken(token);
 

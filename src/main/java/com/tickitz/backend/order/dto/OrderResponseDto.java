@@ -8,12 +8,13 @@ import com.tickitz.backend.ticketOrder.dto.TicketOrderResponseDto;
 import com.tickitz.backend.users.dto.ResponseUserDto;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
 public class OrderResponseDto {
   private Long id;
-  private Long totalPrice;
+  private BigDecimal totalPrice;
   private Integer totalTicket;
   private Long usedPoint;
   private ResponseUserDto user;

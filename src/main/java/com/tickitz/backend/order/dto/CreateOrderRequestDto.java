@@ -5,11 +5,12 @@ import com.tickitz.backend.ticket.dto.TicketResponseDto;
 import com.tickitz.backend.ticketOrder.dto.CreateTicketOrderRequestDto;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
 public class CreateOrderRequestDto {
-  private Long totalPrice;
+  private BigDecimal totalPrice;
   private Integer totalTicket;
   private Long usedPoint;
   private Long userId;

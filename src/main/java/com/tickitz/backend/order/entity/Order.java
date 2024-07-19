@@ -6,6 +6,7 @@ import com.tickitz.backend.promotion.entity.Promotion;
 import com.tickitz.backend.ticketOrder.entity.TicketOrder;
 import com.tickitz.backend.users.entity.Users;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Fetch;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +30,9 @@ public class Order {
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
 
-  @Min(value = 0, message = "Total price must be non-negative")
+  @DecimalMin(value = "0.0", message = "Total price must be non-negative")
   @Column(name = "total_price", nullable = false)
-  private Long totalPrice;
+  private BigDecimal totalPrice;
 
   @Min(value = 1, message = "Minimum total ticket is one")
   @Column(name = "total_ticket", nullable = false)
